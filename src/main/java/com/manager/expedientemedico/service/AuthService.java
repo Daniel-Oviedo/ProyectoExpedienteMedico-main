@@ -23,19 +23,26 @@ public class AuthService {
     }
 
     public LoginResponseDTO login(LoginRequestDTO dto) {
+        try {
+            Usuario usuario = usuarioRepository.findByEmail(dto.getEmail())
+                    .orElseThrow(() -> new RuntimeException("Usuario no encontrado: " + dto.getEmail()));
 
-        Usuario usuario = usuarioRepository.findByEmail(dto.getEmail())
-                .orElseThrow(() -> new RuntimeException("Credenciales inválidas"));
+            if (!passwordEncoder.matches(dto.getPassword(), usuario.getPassword())) {
+                throw new RuntimeException("Contraseña incorrecta");
+            }
 
-        if (!passwordEncoder.matches(dto.getPassword(), usuario.getPassword())) {
-            throw new RuntimeException("Credenciales inválidas");
+            if (usuario.getRol() == null) {
+                throw new RuntimeException("Usuario sin rol asignado");
+            }
+
+            String token = jwtService.generarToken(
+                    usuario.getEmail(),
+                    usuario.getRol().getNombre()
+            );
+
+            return new LoginResponseDTO(token);
+        } catch (Exception ex) {
+            throw new RuntimeException("Error en login: " + ex.getMessage(), ex);
         }
-
-        String token = jwtService.generarToken(
-                usuario.getEmail(),
-                usuario.getRol().getNombre()
-        );
-
-        return new LoginResponseDTO(token);
     }
 }
