@@ -40,4 +40,9 @@ public class ExpedienteController {
         return ResponseEntity.ok(expedienteService.obtenerExpedientePacienteAutenticado());
     }
 
+    @GetMapping("/paciente/{pacienteId}")
+    public ResponseEntity<ExpedienteResponseDTO> obtenerPorPaciente(@PathVariable Long pacienteId) {
+        return ResponseEntity.ok(expedienteService.obtenerPorPacienteId(pacienteId));
+    }
+
 }

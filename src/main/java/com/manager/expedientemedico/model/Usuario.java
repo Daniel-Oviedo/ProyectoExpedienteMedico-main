@@ -22,6 +22,9 @@ public class Usuario {
     private String nombre;
 
     @Column(nullable = false, unique = true)
+    private String identificacion;
+
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)

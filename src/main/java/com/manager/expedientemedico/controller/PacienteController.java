@@ -2,9 +2,15 @@ package com.manager.expedientemedico.controller;
 
 import com.manager.expedientemedico.dto.PacienteRequestDTO;
 import com.manager.expedientemedico.dto.PacienteResponseDTO;
+import com.manager.expedientemedico.dto.PacienteConVitalesDTO;
+import com.manager.expedientemedico.dto.UsuarioResponseDTO;
 import com.manager.expedientemedico.model.Paciente;
+import com.manager.expedientemedico.model.Usuario;
 import com.manager.expedientemedico.service.PacienteService;
+import com.manager.expedientemedico.repository.UsuarioRepository;
+import com.manager.expedientemedico.exception.RecursoNoEncontradoException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,9 +20,12 @@ import java.util.List;
 public class PacienteController {
 
     private final PacienteService pacienteService;
+    private final UsuarioRepository usuarioRepository;
 
-    public PacienteController(PacienteService pacienteService) {
+    public PacienteController(PacienteService pacienteService,
+                             UsuarioRepository usuarioRepository) {
         this.pacienteService = pacienteService;
+        this.usuarioRepository = usuarioRepository;
     }
 
     @PostMapping
@@ -29,4 +38,26 @@ public class PacienteController {
         return ResponseEntity.ok(pacienteService.listar());
     }
 
+    @GetMapping("/buscar")
+    public ResponseEntity<UsuarioResponseDTO> buscarPorCedula(@RequestParam String cedula) {
+        Usuario usuario = usuarioRepository.findByIdentificacion(cedula)
+                .orElseThrow(() -> new RecursoNoEncontradoException("Usuario con cédula " + cedula + " no encontrado"));
+        
+        UsuarioResponseDTO response = new UsuarioResponseDTO(
+                usuario.getId(),
+                usuario.getNombre(),
+                usuario.getEmail(),
+                usuario.getRol().getNombre()
+        );
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/registrar-con-vitales")
+    @PreAuthorize("hasRole('ENFERMERA')")
+    public ResponseEntity<PacienteResponseDTO> registrarPacienteConVitales(
+            @RequestBody PacienteConVitalesDTO dto) {
+        return ResponseEntity.ok(pacienteService.registrarPacienteConVitales(dto));
+    }
+
 }
+

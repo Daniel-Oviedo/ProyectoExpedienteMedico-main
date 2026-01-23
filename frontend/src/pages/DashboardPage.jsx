@@ -45,35 +45,35 @@ export function DashboardPage() {
             {user?.rol === 'ROLE_ENFERMERA' && (
               <>
                 <button 
+                  onClick={() => navigate('/enfermera')}
+                  className="nav-btn btn-action"
+                >
+                  ➕ Registrar Nuevo Paciente
+                </button>
+                <button 
                   onClick={() => navigate('/expediente')}
                   className="nav-btn"
                 >
                   📋 Ver Expediente del Paciente
                 </button>
-                <button 
-                  onClick={() => navigate('/crear-registro/1')}
-                  className="nav-btn btn-action"
-                >
-                  📊 Registrar Signos Vitales
-                </button>
-                <p className="nav-info">✏️ Puedes registrar: Presión arterial, Peso, Altura y Observaciones</p>
+                <p className="nav-info">✏️ Registra: Fecha de nacimiento, signos vitales (presión, peso, altura) y observaciones</p>
               </>
             )}
             {user?.rol === 'ROLE_MEDICA' && (
               <>
                 <button 
+                  onClick={() => navigate('/medica')}
+                  className="nav-btn btn-action"
+                >
+                  👩‍⚕️ Registrar Diagnóstico
+                </button>
+                <button 
                   onClick={() => navigate('/expediente')}
                   className="nav-btn"
                 >
                   📋 Ver Expediente del Paciente
                 </button>
-                <button 
-                  onClick={() => navigate('/crear-registro/1')}
-                  className="nav-btn btn-action"
-                >
-                  📋 Registrar Diagnóstico
-                </button>
-                <p className="nav-info">✏️ Puedes registrar: Diagnóstico, Medicamentos y Observaciones</p>
+                <p className="nav-info">✏️ Revisa los signos vitales y registra: Diagnóstico, Medicamentos y Observaciones</p>
               </>
             )}
           </nav>

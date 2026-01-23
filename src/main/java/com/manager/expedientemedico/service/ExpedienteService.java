@@ -108,4 +108,21 @@ public class ExpedienteService {
         
         return dto;
     }
+
+    public ExpedienteResponseDTO obtenerPorPacienteId(Long pacienteId) {
+        
+        Expediente expediente = expedienteRepository.findByPacienteId(pacienteId)
+                .orElseThrow(() -> new RecursoNoEncontradoException(
+                        "Expediente no encontrado para el paciente"
+                ));
+        
+        ExpedienteResponseDTO dto = new ExpedienteResponseDTO();
+        dto.setId(expediente.getId());
+        dto.setFechaCreacion(expediente.getFechaCreacion());
+        dto.setEstado(expediente.getEstado());
+        dto.setPacienteId(expediente.getPaciente().getId());
+        dto.setPaciente(expediente.getPaciente());
+        
+        return dto;
+    }
 }

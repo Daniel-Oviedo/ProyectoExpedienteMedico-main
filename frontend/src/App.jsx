@@ -6,6 +6,8 @@ import { DashboardPage } from './pages/DashboardPage'
 import { ExpedientePage } from './pages/ExpedientePage'
 import { RegistrosMedicoPage } from './pages/RegistrosMedicoPage'
 import { CrearRegistroPage } from './pages/CrearRegistroPage'
+import { EnfermeraPage } from './pages/EnfermeraPage'
+import { MedicaPage } from './pages/MedicaPage'
 import './App.css'
 
 function App() {
@@ -47,6 +49,24 @@ function App() {
             element={
               <ProtectedRoute>
                 <CrearRegistroPage />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/enfermera"
+            element={
+              <ProtectedRoute>
+                <EnfermeraPage />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/medica"
+            element={
+              <ProtectedRoute>
+                <MedicaPage />
               </ProtectedRoute>
             }
           />

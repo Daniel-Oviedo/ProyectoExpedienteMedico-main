@@ -2,6 +2,7 @@ package com.manager.expedientemedico.service;
 
 import com.manager.expedientemedico.dto.RegistroMedicoRequestDTO;
 import com.manager.expedientemedico.dto.RegistroMedicoResponseDTO;
+import com.manager.expedientemedico.dto.RegistroDiagnosticoDTO;
 import com.manager.expedientemedico.exception.OperacionNoPermitidaException;
 import com.manager.expedientemedico.exception.RecursoNoEncontradoException;
 import com.manager.expedientemedico.model.Expediente;
@@ -12,6 +13,7 @@ import com.manager.expedientemedico.repository.RegistroMedicoRepository;
 import com.manager.expedientemedico.repository.UsuarioRepository;
 import com.manager.expedientemedico.security.SecurityUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -116,5 +118,37 @@ public class RegistroMedicoService {
                     return dto;
                 })
                 .toList();
+    }
+
+    @Transactional
+    public RegistroMedicoResponseDTO registrarDiagnostico(RegistroDiagnosticoDTO dto) {
+        
+        Expediente expediente = expedienteRepository.findById(dto.getExpedienteId())
+                .orElseThrow(() -> new RecursoNoEncontradoException("Expediente no encontrado"));
+
+        String email = SecurityUtils.getEmailUsuarioActual();
+        Usuario medica = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new RecursoNoEncontradoException("Médica no encontrada"));
+
+        // Crear registro de diagnóstico
+        RegistroMedico registro = new RegistroMedico();
+        registro.setExpediente(expediente);
+        registro.setUsuario(medica);
+        registro.setDiagnostico(dto.getDiagnostico());
+        registro.setMedicamentos(dto.getMedicamentos());
+        registro.setObservaciones(dto.getObservaciones());
+
+        RegistroMedico guardado = registroRepository.save(registro);
+
+        RegistroMedicoResponseDTO response = new RegistroMedicoResponseDTO();
+        response.setId(guardado.getId());
+        response.setFechaRegistro(guardado.getFechaRegistro());
+        response.setObservaciones(guardado.getObservaciones());
+        response.setDiagnostico(guardado.getDiagnostico());
+        response.setMedicamentos(guardado.getMedicamentos());
+        response.setExpedienteId(expediente.getId());
+        response.setUsuarioId(medica.getId());
+
+        return response;
     }
 }

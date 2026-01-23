@@ -52,6 +52,30 @@ public class UsuarioService {
         );
     }
 
+    public UsuarioResponseDTO registroPublico(com.manager.expedientemedico.dto.auth.RegistroRequestDTO dto) {
+
+        Rol rol = rolRepository.findById(dto.getRolId())
+                .orElseThrow(() -> new RecursoNoEncontradoException("Rol no encontrado"));
+
+        Usuario usuario = new Usuario();
+        usuario.setIdentificacion(dto.getCedula());
+        usuario.setNombre(dto.getNombre());
+        usuario.setEmail(dto.getEmail());
+        usuario.setPassword(
+                passwordEncoder.encode(dto.getPassword())
+        );
+        usuario.setRol(rol);
+
+        Usuario guardado = usuarioRepository.save(usuario);
+
+        return new UsuarioResponseDTO(
+                guardado.getId(),
+                guardado.getNombre(),
+                guardado.getEmail(),
+                guardado.getRol().getNombre()
+        );
+    }
+
     public List<Usuario> listar() {
         return usuarioRepository.findAll();
     }
