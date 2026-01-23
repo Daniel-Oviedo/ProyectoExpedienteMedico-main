@@ -37,7 +37,7 @@ export function PacientePage() {
       }
     } catch (err) {
       if (err.response?.status === 404) {
-        setError('📋 Aún no tienes expediente. Será creado cuando la enfermera te registre.')
+        setError('📋 Aún no tienes expediente. La enfermera debe registrarte primero buscando tu cédula y registrando tus signos vitales.')
       } else if (err.response?.status === 403) {
         setError('⚠️ No tienes acceso. Verifica que hayas iniciado sesión como paciente.')
       } else {
