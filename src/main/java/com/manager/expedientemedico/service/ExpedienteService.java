@@ -89,22 +89,33 @@ public class ExpedienteService {
                 ));
         
         // Obtener paciente asociado al usuario
-        Paciente paciente = pacienteRepository.findByUsuarioId(usuario.getId())
-                .orElseThrow(() -> new RecursoNoEncontradoException(
-                        "No hay un perfil de paciente asociado al usuario: " + email
-                ));
+        var pacienteOpt = pacienteRepository.findByUsuarioId(usuario.getId());
+        
+        if (pacienteOpt.isEmpty()) {
+            throw new RecursoNoEncontradoException(
+                    "No hay un perfil de paciente asociado al usuario. Será creado cuando la enfermera te registre."
+            );
+        }
+        
+        Paciente paciente = pacienteOpt.get();
         
         // Obtener expediente del paciente
-        Expediente expediente = expedienteRepository.findByPacienteId(paciente.getId())
-                .orElseThrow(() -> new RecursoNoEncontradoException(
-                        "El paciente no tiene un expediente médico registrado"
-                ));
+        var expedienteOpt = expedienteRepository.findByPacienteId(paciente.getId());
+        
+        if (expedienteOpt.isEmpty()) {
+            throw new RecursoNoEncontradoException(
+                    "El paciente no tiene un expediente médico registrado. Será creado cuando la enfermera te registre."
+            );
+        }
+        
+        Expediente expediente = expedienteOpt.get();
         
         ExpedienteResponseDTO dto = new ExpedienteResponseDTO();
         dto.setId(expediente.getId());
         dto.setFechaCreacion(expediente.getFechaCreacion());
         dto.setEstado(expediente.getEstado());
         dto.setPacienteId(expediente.getPaciente().getId());
+        dto.setPaciente(expediente.getPaciente());
         
         return dto;
     }

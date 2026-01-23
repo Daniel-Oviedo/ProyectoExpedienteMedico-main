@@ -34,8 +34,8 @@ export function DashboardPage() {
             {user?.rol === 'ROLE_PACIENTE' && (
               <>
                 <button 
-                  onClick={() => navigate('/expediente')}
-                  className="nav-btn"
+                  onClick={() => navigate('/paciente')}
+                  className="nav-btn btn-action"
                 >
                   📋 Mi Expediente
                 </button>

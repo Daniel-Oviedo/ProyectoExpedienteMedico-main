@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import './LoginPage.css'
 
@@ -72,6 +72,10 @@ export function LoginPage() {
             <li><strong>Paciente:</strong> paciente@correo.com / 1234</li>
           </ul>
         </div>
+
+        <p className="registro-link">
+          ¿No tienes cuenta? <Link to="/registro">Regístrate aquí</Link>
+        </p>
       </div>
     </div>
   )

@@ -2,12 +2,14 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { AuthProvider } from './context/AuthContext'
 import { ProtectedRoute } from './components/ProtectedRoute'
 import { LoginPage } from './pages/LoginPage'
+import { RegistroPage } from './pages/RegistroPage'
 import { DashboardPage } from './pages/DashboardPage'
 import { ExpedientePage } from './pages/ExpedientePage'
 import { RegistrosMedicoPage } from './pages/RegistrosMedicoPage'
 import { CrearRegistroPage } from './pages/CrearRegistroPage'
 import { EnfermeraPage } from './pages/EnfermeraPage'
 import { MedicaPage } from './pages/MedicaPage'
+import { PacientePage } from './pages/PacientePage'
 import './App.css'
 
 function App() {
@@ -16,6 +18,7 @@ function App() {
       <AuthProvider>
         <Routes>
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/registro" element={<RegistroPage />} />
           
           <Route
             path="/dashboard"
@@ -67,6 +70,15 @@ function App() {
             element={
               <ProtectedRoute>
                 <MedicaPage />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/paciente"
+            element={
+              <ProtectedRoute>
+                <PacientePage />
               </ProtectedRoute>
             }
           />

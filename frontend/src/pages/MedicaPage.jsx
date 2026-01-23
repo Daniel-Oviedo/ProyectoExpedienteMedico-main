@@ -33,7 +33,7 @@ export function MedicaPage() {
   const cargarExpedientes = async () => {
     setLoading(true)
     try {
-      const response = await api.get('/api/pacientes')
+      const response = await api.get('/api/pacientes/sin-diagnostico')
       // Filtrar solo los que tienen paciente
       const pacientes = response.data || []
       setExpedientes(pacientes)
@@ -95,6 +95,7 @@ export function MedicaPage() {
           medicamentos: '',
           observaciones: ''
         })
+        cargarExpedientes() // Recargar lista filtrada
       }, 2000)
     } catch (err) {
       setError(err.response?.data?.message || 'Error al registrar')

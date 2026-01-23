@@ -38,6 +38,12 @@ public class PacienteController {
         return ResponseEntity.ok(pacienteService.listar());
     }
 
+    @GetMapping("/sin-diagnostico")
+    @PreAuthorize("hasRole('MEDICA')")
+    public ResponseEntity<List<Paciente>> listarSinDiagnostico() {
+        return ResponseEntity.ok(pacienteService.listarSinDiagnostico());
+    }
+
     @GetMapping("/buscar")
     public ResponseEntity<UsuarioResponseDTO> buscarPorCedula(@RequestParam String cedula) {
         Usuario usuario = usuarioRepository.findByIdentificacion(cedula)
