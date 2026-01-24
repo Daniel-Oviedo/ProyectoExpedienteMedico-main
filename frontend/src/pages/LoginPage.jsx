@@ -64,15 +64,6 @@ export function LoginPage() {
           </button>
         </form>
 
-        <div className="demo-users">
-          <p>👤 Usuarios de prueba:</p>
-          <ul>
-            <li><strong>Médica:</strong> medica@hospital.com / 1234</li>
-            <li><strong>Enfermera:</strong> enfermera@hospital.com / 1234</li>
-            <li><strong>Paciente:</strong> paciente@correo.com / 1234</li>
-          </ul>
-        </div>
-
         <p className="registro-link">
           ¿No tienes cuenta? <Link to="/registro">Regístrate aquí</Link>
         </p>

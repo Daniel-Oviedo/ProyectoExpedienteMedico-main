@@ -68,7 +68,7 @@ export function RegistroPage() {
         rolId: 1 // PACIENTE role ID = 1
       })
 
-      setSuccess('✅ Registro exitoso. Redirigiendo a login...')
+      setSuccess('Registro exitoso. Redirigiendo a login...')
       
       setTimeout(() => {
         navigate('/login')
@@ -83,7 +83,18 @@ export function RegistroPage() {
   return (
     <div className="registro-container">
       <div className="registro-card">
-        <h1>📋 Registro de Paciente</h1>
+        <div className="registro-header">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="header-icon">
+            <path strokeNone d="M0 0h24v24H0z" fill="none"/>
+            <path d="M4 8v-2a2 2 0 0 1 2 -2h2" />
+            <path d="M4 16v2a2 2 0 0 0 2 2h2" />
+            <path d="M16 4h2a2 2 0 0 1 2 2v2" />
+            <path d="M16 20h2a2 2 0 0 0 2 -2v-2" />
+            <path d="M8 12a1 1 0 0 1 1 -1h6a1 1 0 0 1 1 1v3a1 1 0 0 1 -1 1h-6a1 1 0 0 1 -1 -1l0 -3" />
+            <path d="M10 11v-2a2 2 0 1 1 4 0v2" />
+          </svg>
+          <h1>Registro de Paciente</h1>
+        </div>
         
         {error && <div className="alert alert-error">{error}</div>}
         {success && <div className="alert alert-success">{success}</div>}
@@ -159,7 +170,15 @@ export function RegistroPage() {
             className="btn-primary"
             disabled={loading}
           >
-            {loading ? '⏳ Registrando...' : '✅ Registrarse'}
+            {loading ? 'Registrando...' : (
+              <>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" className="button-icon">
+                  <path strokeNone d="M0 0h24v24H0z" fill="none"/>
+                  <path d="M17 3.34a10 10 0 1 1 -14.995 8.984l-.005 -.324l.005 -.324a10 10 0 0 1 14.995 -8.336zm-1.293 5.953a1 1 0 0 0 -1.32 -.083l-.094 .083l-3.293 3.292l-1.293 -1.292l-.094 -.083a1 1 0 0 0 -1.403 1.403l.083 .094l2 2l.094 .083a1 1 0 0 0 1.226 0l.094 -.083l4 -4l.083 -.094a1 1 0 0 0 -.083 -1.32z" />
+                </svg>
+                Registrarse
+              </>
+            )}
           </button>
         </form>
 

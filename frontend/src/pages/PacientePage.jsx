@@ -64,9 +64,10 @@ export function PacientePage() {
   return (
     <div className="paciente-container">
       <div className="paciente-header">
-        <div className="header-content">
-          <h1>📋 Mi Expediente Médico</h1>
-          <button className="btn-logout" onClick={handleLogout}>🚪 Cerrar Sesión</button>
+        <h1>Mi Expediente Médico</h1>
+        <div className="header-buttons">
+          <button className="btn-back" onClick={() => navigate('/dashboard')}>Volver</button>
+          <button className="btn-logout" onClick={handleLogout}>Cerrar Sesión</button>
         </div>
       </div>
 

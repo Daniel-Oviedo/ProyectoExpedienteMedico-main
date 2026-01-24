@@ -35,16 +35,12 @@ public class SecurityConfig {
                 .formLogin(form -> form.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/login", "/auth/registro").permitAll()
-
-                        // REGISTROS MÉDICOS - Lectura para todos autenticados, escritura solo para enfermera/médica
                         .requestMatchers(request -> 
                                 request.getMethod().equals("GET") && request.getRequestURI().startsWith("/api/registros-medicos"))
                         .authenticated()
                         .requestMatchers(request -> 
                                 request.getMethod().equals("POST") && request.getRequestURI().startsWith("/api/registros-medicos"))
                         .hasAnyAuthority("ROLE_MEDICA", "ROLE_ENFERMERA")
-
-                        // TODO LO DEMÁS
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(

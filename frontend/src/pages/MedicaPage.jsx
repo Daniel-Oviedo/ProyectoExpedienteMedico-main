@@ -25,6 +25,10 @@ export function MedicaPage() {
   const [success, setSuccess] = useState('')
 
   useEffect(() => {
+    cargarExpedientes()
+  }, [])
+
+  useEffect(() => {
     if (step === 1) {
       cargarExpedientes()
     }
@@ -32,12 +36,13 @@ export function MedicaPage() {
 
   const cargarExpedientes = async () => {
     setLoading(true)
+    setError('')
     try {
       const response = await api.get('/api/pacientes/sin-diagnostico')
-      // Filtrar solo los que tienen paciente
       const pacientes = response.data || []
       setExpedientes(pacientes)
     } catch (err) {
+      console.error('Error al cargar expedientes:', err)
       setError('Error al cargar expedientes')
     } finally {
       setLoading(false)
@@ -53,7 +58,12 @@ export function MedicaPage() {
       
       // Obtener registros médicos
       const registrosResponse = await api.get(`/api/registros-medicos/expediente/${expedienteResponse.data.id}`)
-      setRegistros(registrosResponse.data || [])
+      // Filtrar solo los registros SIN diagnóstico (los pendientes)
+      let registrosPendientes = (registrosResponse.data || []).filter(r => !r.diagnostico)
+      
+      // Ordenar por fecha descendente y tomar solo el más reciente
+      registrosPendientes = registrosPendientes.sort((a, b) => new Date(b.fechaRegistro) - new Date(a.fechaRegistro)).slice(0, 1)
+      setRegistros(registrosPendientes)
       
       setFormData(prev => ({
         ...prev,
@@ -83,7 +93,7 @@ export function MedicaPage() {
 
     try {
       await api.post('/api/registros-medicos/diagnostico', formData)
-      setSuccess('✅ Diagnóstico registrado exitosamente')
+      setSuccess('Diagnóstico registrado exitosamente')
       
       setTimeout(() => {
         setStep(1)
@@ -116,7 +126,7 @@ export function MedicaPage() {
     })
   }
 
-  const tieneDiagnostico = registros.some(r => r.diagnostico)
+  const tieneDiagnostico = registros.length > 0 && registros.every(r => r.diagnostico)
 
   return (
     <div className="medica-container">
@@ -269,7 +279,15 @@ export function MedicaPage() {
                   disabled={loading || tieneDiagnostico}
                   className="btn-primary"
                 >
-                  {loading ? '⏳ Registrando...' : '✅ Registrar Diagnóstico'}
+                  {loading ? 'Registrando...' : (
+                    <>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" className="button-icon">
+                        <path strokeNone d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M17 3.34a10 10 0 1 1 -14.995 8.984l-.005 -.324l.005 -.324a10 10 0 0 1 14.995 -8.336zm-1.293 5.953a1 1 0 0 0 -1.32 -.083l-.094 .083l-3.293 3.292l-1.293 -1.292l-.094 -.083a1 1 0 0 0 -1.403 1.403l.083 .094l2 2l.094 .083a1 1 0 0 0 1.226 0l.094 -.083l4 -4l.083 -.094a1 1 0 0 0 -.083 -1.32z" />
+                      </svg>
+                      <span>Registrar Diagnóstico</span>
+                    </>
+                  )}
                 </button>
               </div>
             </form>

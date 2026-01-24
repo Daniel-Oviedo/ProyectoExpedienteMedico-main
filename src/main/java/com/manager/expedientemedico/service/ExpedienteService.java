@@ -81,14 +81,10 @@ public class ExpedienteService {
 
     public ExpedienteResponseDTO obtenerExpedientePacienteAutenticado() {
         String email = SecurityUtils.getEmailUsuarioActual();
-        
-        // Obtener usuario autenticado
         var usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new RecursoNoEncontradoException(
                         "Usuario autenticado no encontrado: " + email
                 ));
-        
-        // Obtener paciente asociado al usuario
         var pacienteOpt = pacienteRepository.findByUsuarioId(usuario.getId());
         
         if (pacienteOpt.isEmpty()) {
@@ -98,8 +94,6 @@ public class ExpedienteService {
         }
         
         Paciente paciente = pacienteOpt.get();
-        
-        // Obtener expediente del paciente
         var expedienteOpt = expedienteRepository.findByPacienteId(paciente.getId());
         
         if (expedienteOpt.isEmpty()) {

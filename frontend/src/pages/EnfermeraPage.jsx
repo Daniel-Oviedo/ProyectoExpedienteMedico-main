@@ -60,10 +60,21 @@ export function EnfermeraPage() {
 
     try {
       await api.post('/api/pacientes/registrar-con-vitales', formData)
-      setSuccess('✅ Paciente, expediente y signos vitales registrados exitosamente')
+      setSuccess('Paciente, expediente y signos vitales registrados exitosamente')
       
       setTimeout(() => {
-        navigate('/dashboard')
+        setStep(1)
+        setUsuarioEncontrado(null)
+        setCedula('')
+        setFormData({
+          usuarioId: null,
+          fechaNacimiento: '',
+          presionArterial: '',
+          peso: '',
+          altura: '',
+          observaciones: ''
+        })
+        setSuccess('')
       }, 2000)
     } catch (err) {
       setError(err.response?.data?.message || 'Error al registrar')
@@ -81,7 +92,15 @@ export function EnfermeraPage() {
   return (
     <div className="enfermera-container">
       <div className="enfermera-header">
-        <h1>🩺 Panel de Enfermería</h1>
+        <div className="header-content">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="header-icon">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M12 5c2.941 0 6.685 1.537 9 3l-2 11h-14l-2 -11c2.394 -1.513 6.168 -3.005 9 -3" />
+            <path d="M10 12h4" />
+            <path d="M12 10v4" />
+          </svg>
+          <h1>Panel de Enfermería</h1>
+        </div>
         <p>Registra nuevos pacientes con sus signos vitales</p>
         <button onClick={() => navigate('/dashboard')} className="btn-back">← Volver</button>
       </div>
@@ -90,7 +109,7 @@ export function EnfermeraPage() {
         {step === 1 ? (
           // PASO 1: BUSCAR PACIENTE
           <form onSubmit={handleBuscarPaciente} className="form-buscar">
-            <h2>Paso 1: Buscar Paciente por Cédula</h2>
+            <h2>Buscar Paciente por Cédula</h2>
             
             <div className="form-group">
               <label htmlFor="cedula">Número de Cédula:</label>
@@ -108,7 +127,22 @@ export function EnfermeraPage() {
             {error && <div className="alert alert-error">{error}</div>}
 
             <button type="submit" disabled={loading} className="btn-primary">
-              {loading ? '⏳ Buscando...' : '🔍 Buscar Paciente'}
+              {loading ? (
+                <>
+                  <span>Buscando...</span>
+                </>
+              ) : (
+                <>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="button-icon">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M14 3v4a1 1 0 0 0 1 1h4" />
+                    <path d="M12 21h-5a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v4.5" />
+                    <path d="M14 17.5a2.5 2.5 0 1 0 5 0a2.5 2.5 0 1 0 -5 0" />
+                    <path d="M18.5 19.5l2.5 2.5" />
+                  </svg>
+                  <span>Buscar Paciente</span>
+                </>
+              )}
             </button>
           </form>
         ) : (
@@ -225,7 +259,15 @@ export function EnfermeraPage() {
                 disabled={loading}
                 className="btn-primary"
               >
-                {loading ? '⏳ Registrando...' : '✅ Registrar Paciente'}
+                {loading ? 'Registrando...' : (
+                  <>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" className="button-icon">
+                      <path strokeNone d="M0 0h24v24H0z" fill="none"/>
+                      <path d="M17 3.34a10 10 0 1 1 -14.995 8.984l-.005 -.324l.005 -.324a10 10 0 0 1 14.995 -8.336zm-1.293 5.953a1 1 0 0 0 -1.32 -.083l-.094 .083l-3.293 3.292l-1.293 -1.292l-.094 -.083a1 1 0 0 0 -1.403 1.403l.083 .094l2 2l.094 .083a1 1 0 0 0 1.226 0l.094 -.083l4 -4l.083 -.094a1 1 0 0 0 -.083 -1.32z" />
+                    </svg>
+                    <span>Registrar Paciente</span>
+                  </>
+                )}
               </button>
             </div>
           </form>

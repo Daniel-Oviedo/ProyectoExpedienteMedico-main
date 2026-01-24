@@ -20,18 +20,12 @@ public class RegistroMedico {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    // QUIÉN creó el registro (médico o enfermera)
     @ManyToOne
     @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
-
-    // A QUÉ expediente pertenece
     @ManyToOne
     @JoinColumn(name = "expediente_id", nullable = false)
     private Expediente expediente;
-
-    // DATOS MÉDICOS
     @Column(columnDefinition = "TEXT")
     private String observaciones;
 
@@ -40,8 +34,6 @@ public class RegistroMedico {
 
     @Column(columnDefinition = "TEXT")
     private String medicamentos;
-
-    // SIGNOS VITALES (enfermería)
     private String presionArterial;
     private Double peso;
     private Double altura;

@@ -69,11 +69,14 @@ public class PacienteService {
         return todos.stream().filter(paciente -> {
             Optional<Expediente> expediente = expedienteRepository.findByPacienteId(paciente.getId());
             if (expediente.isPresent()) {
-                List<RegistroMedico> registros = registroMedicoRepository.findByExpedienteId(expediente.get().getId());
-                // Si tiene registros y alguno tiene diagnóstico, filtrar
-                return registros.stream().noneMatch(r -> r.getDiagnostico() != null && !r.getDiagnostico().isEmpty());
+                // Solo mostrar si el estado es PENDIENTE
+                if ("PENDIENTE".equals(expediente.get().getEstado())) {
+                    List<RegistroMedico> registros = registroMedicoRepository.findByExpedienteId(expediente.get().getId());
+                    // Retorna verdadero si hay al menos UN registro sin diagnóstico (signos vitales registrados)
+                    return registros.stream().anyMatch(r -> (r.getDiagnostico() == null || r.getDiagnostico().isEmpty()) && r.getPresionArterial() != null);
+                }
             }
-            return true; // Si no tiene expediente, mostrar
+            return false;
         }).toList();
     }
 
@@ -83,15 +86,12 @@ public class PacienteService {
 
     @Transactional
     public PacienteResponseDTO registrarPacienteConVitales(PacienteConVitalesDTO dto) {
-        
-        // 1. Buscar usuario
         Usuario usuario = usuarioRepository.findById(dto.getUsuarioId())
                 .orElseThrow(() -> new RecursoNoEncontradoException("Usuario no encontrado"));
 
-        // 2. Verificar si ya existe un Paciente para este usuario
+       
         Paciente paciente = pacienteRepository.findByUsuarioId(usuario.getId())
                 .orElseGet(() -> {
-                    // Si no existe, crear uno nuevo
                     Paciente nuevoPaciente = new Paciente();
                     nuevoPaciente.setNombre(usuario.getNombre());
                     nuevoPaciente.setIdentificacion(usuario.getIdentificacion());
@@ -99,25 +99,25 @@ public class PacienteService {
                     nuevoPaciente.setUsuario(usuario);
                     return pacienteRepository.save(nuevoPaciente);
                 });
-
-        // 3. Actualizar fecha de nacimiento si se proporcionó
         if (dto.getFechaNacimiento() != null) {
             paciente.setFechaNacimiento(dto.getFechaNacimiento());
             paciente = pacienteRepository.save(paciente);
         }
-
-        // 4. Verificar si ya existe un Expediente para este paciente
+        
         final Paciente pacienteFinal = paciente;
         Expediente expediente = expedienteRepository.findByPacienteId(pacienteFinal.getId())
                 .orElseGet(() -> {
-                    // Si no existe, crear uno nuevo
                     Expediente nuevoExpediente = new Expediente();
                     nuevoExpediente.setPaciente(pacienteFinal);
-                    nuevoExpediente.setEstado("ACTIVO");
+                    nuevoExpediente.setEstado("PENDIENTE");
                     return expedienteRepository.save(nuevoExpediente);
                 });
-
-        // 5. Crear Registro Médico con signos vitales (creado por la enfermera actual)
+        
+        // Si el expediente ya existe pero está completado, cambiar a PENDIENTE
+        if ("COMPLETADO".equals(expediente.getEstado())) {
+            expediente.setEstado("PENDIENTE");
+            expediente = expedienteRepository.save(expediente);
+        }
         String emailEnfermera = SecurityUtils.getEmailUsuarioActual();
         Usuario enfermera = usuarioRepository.findByEmail(emailEnfermera)
                 .orElseThrow(() -> new RecursoNoEncontradoException("Enfermera no encontrada"));
@@ -129,10 +129,7 @@ public class PacienteService {
         registro.setPeso(dto.getPeso());
         registro.setAltura(dto.getAltura());
         registro.setObservaciones(dto.getObservaciones());
-        
         registroMedicoRepository.save(registro);
-
-        // 6. Retornar respuesta
         PacienteResponseDTO response = new PacienteResponseDTO();
         response.setId(paciente.getId());
         response.setNombre(paciente.getNombre());

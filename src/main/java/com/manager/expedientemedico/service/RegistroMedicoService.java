@@ -48,7 +48,7 @@ public class RegistroMedicoService {
 
         String rol = SecurityUtils.getRolUsuarioActual();
 
-        // 🚫 PACIENTE
+        
         if (rol.equals("ROLE_PACIENTE")) {
             throw new OperacionNoPermitidaException(
                     "El paciente no puede crear registros médicos"
@@ -60,7 +60,7 @@ public class RegistroMedicoService {
         registro.setUsuario(usuario);
         registro.setObservaciones(dto.getObservaciones());
 
-        // 🩺 ENFERMERA
+        
         if (rol.equals("ROLE_ENFERMERA")) {
 
             registro.setPresionArterial(dto.getPresionArterial());
@@ -71,7 +71,7 @@ public class RegistroMedicoService {
             registro.setMedicamentos(null);
         }
 
-        // 👩‍⚕️ MÉDICA
+        
         else if (rol.equals("ROLE_MEDICA")) {
 
             registro.setDiagnostico(dto.getDiagnostico());
@@ -130,7 +130,7 @@ public class RegistroMedicoService {
         Usuario medica = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new RecursoNoEncontradoException("Médica no encontrada"));
 
-        // Crear registro de diagnóstico
+       
         RegistroMedico registro = new RegistroMedico();
         registro.setExpediente(expediente);
         registro.setUsuario(medica);
@@ -139,6 +139,10 @@ public class RegistroMedicoService {
         registro.setObservaciones(dto.getObservaciones());
 
         RegistroMedico guardado = registroRepository.save(registro);
+        
+        // Actualizar estado del expediente a COMPLETADO
+        expediente.setEstado("COMPLETADO");
+        expedienteRepository.save(expediente);
 
         RegistroMedicoResponseDTO response = new RegistroMedicoResponseDTO();
         response.setId(guardado.getId());

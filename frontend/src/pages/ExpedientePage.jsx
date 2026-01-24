@@ -33,7 +33,7 @@ export function ExpedientePage() {
       <div className="expediente-header">
         <h1>Mi Expediente Médico</h1>
         <button onClick={() => navigate('/dashboard')} className="btn-back">
-          ← Volver al Dashboard
+          Volver
         </button>
       </div>
 
