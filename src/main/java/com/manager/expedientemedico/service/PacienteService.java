@@ -128,6 +128,8 @@ public class PacienteService {
         registro.setPresionArterial(dto.getPresionArterial());
         registro.setPeso(dto.getPeso());
         registro.setAltura(dto.getAltura());
+        registro.setTemperatura(dto.getTemperatura());
+        registro.setSaturacionOxigeno(dto.getSaturacionOxigeno());
         registro.setObservaciones(dto.getObservaciones());
         registroMedicoRepository.save(registro);
         PacienteResponseDTO response = new PacienteResponseDTO();

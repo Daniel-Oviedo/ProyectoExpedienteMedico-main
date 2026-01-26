@@ -18,6 +18,8 @@ export function EnfermeraPage() {
     presionArterial: '',
     peso: '',
     altura: '',
+    temperatura: '',
+    saturacionOxigeno: '',
     observaciones: ''
   })
   
@@ -72,6 +74,8 @@ export function EnfermeraPage() {
           presionArterial: '',
           peso: '',
           altura: '',
+          temperatura: '',
+          saturacionOxigeno: '',
           observaciones: ''
         })
         setSuccess('')
@@ -223,6 +227,38 @@ export function EnfermeraPage() {
                     placeholder="1.75"
                     step="0.01"
                     required
+                    disabled={loading}
+                  />
+                </div>
+              </div>
+
+              <div className="form-row">
+                <div className="form-group">
+                  <label htmlFor="temperatura">Temperatura (°C):</label>
+                  <input
+                    type="number"
+                    id="temperatura"
+                    name="temperatura"
+                    value={formData.temperatura}
+                    onChange={handleInputChange}
+                    placeholder="36.5"
+                    step="0.1"
+                    disabled={loading}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="saturacionOxigeno">Saturación de Oxígeno (%):</label>
+                  <input
+                    type="number"
+                    id="saturacionOxigeno"
+                    name="saturacionOxigeno"
+                    value={formData.saturacionOxigeno}
+                    onChange={handleInputChange}
+                    placeholder="98"
+                    step="0.1"
+                    min="0"
+                    max="100"
                     disabled={loading}
                   />
                 </div>

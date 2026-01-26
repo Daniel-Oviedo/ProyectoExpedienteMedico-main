@@ -18,4 +18,6 @@ public class RegistroMedicoRequestDTO {
     private String presionArterial;
     private Double peso;
     private Double altura;
+    private Double temperatura;
+    private Double saturacionOxigeno;
 }

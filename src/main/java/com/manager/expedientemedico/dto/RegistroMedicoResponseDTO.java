@@ -20,6 +20,8 @@ public class RegistroMedicoResponseDTO {
     private String presionArterial;
     private Double peso;
     private Double altura;
+    private Double temperatura;
+    private Double saturacionOxigeno;
 
     private Long expedienteId;
     private Long usuarioId;

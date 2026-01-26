@@ -10,6 +10,7 @@ export function MedicaPage() {
   
   const [step, setStep] = useState(1) // 1: menú, 2: pendientes, 3: diagnóstico, 4: historial, 5: ver historial
   const [expedientes, setExpedientes] = useState([])
+  const [todosPacientes, setTodosPacientes] = useState([])
   const [expedienteSeleccionado, setExpedienteSeleccionado] = useState(null)
   const [registros, setRegistros] = useState([])
   const [historicoCompleto, setHistoricoCompleto] = useState([])
@@ -30,8 +31,10 @@ export function MedicaPage() {
   }, [])
 
   useEffect(() => {
-    if (step === 2 || step === 4) {
+    if (step === 2) {
       cargarExpedientes()
+    } else if (step === 4) {
+      cargarTodosPacientes()
     }
   }, [step])
 
@@ -44,6 +47,20 @@ export function MedicaPage() {
     } catch (err) {
       console.error('Error:', err)
       setError('Error al cargar expedientes')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const cargarTodosPacientes = async () => {
+    setLoading(true)
+    setError('')
+    try {
+      const response = await api.get('/api/pacientes')
+      setTodosPacientes(response.data || [])
+    } catch (err) {
+      console.error('Error:', err)
+      setError('Error al cargar pacientes')
     } finally {
       setLoading(false)
     }
@@ -126,16 +143,16 @@ export function MedicaPage() {
     }
   }
 
-  const handleVolverHeader = () => {
-    if (step === 1) {
-      navigate('/dashboard')
-    } else if (step === 2 || step === 4) {
-      setStep(1)
-    } else if (step === 3) {
-      setStep(2)
-    } else if (step === 5) {
-      setStep(4)
-    }
+  const handleVolver = () => {
+    setStep(2)
+    setExpedienteSeleccionado(null)
+    setRegistros([])
+    setFormData({
+      expedienteId: null,
+      diagnostico: '',
+      medicamentos: '',
+      observaciones: ''
+    })
   }
 
   const tieneDiagnostico = registros.length > 0 && registros.every(r => r.diagnostico)
@@ -145,7 +162,7 @@ export function MedicaPage() {
       <div className="medica-header">
         <h1>👩‍⚕️ Panel de Médica</h1>
         <p>Revisa expedientes y registra diagnósticos</p>
-        <button onClick={handleVolverHeader} className="btn-back">← Volver</button>
+        <button onClick={() => navigate('/dashboard')} className="btn-back">← Volver</button>
       </div>
 
       <div className="medica-card">
@@ -239,22 +256,22 @@ export function MedicaPage() {
               {success && <div className="alert alert-success">{success}</div>}
 
               <div className="form-buttons">
-                <button type="button" onClick={() => setStep(2)} disabled={loading} className="btn-secondary">← Volver</button>
+                <button type="button" onClick={handleVolver} disabled={loading} className="btn-secondary">← Volver</button>
                 <button type="submit" disabled={loading || tieneDiagnostico} className="btn-primary">{loading ? 'Registrando...' : 'Registrar Diagnóstico'}</button>
               </div>
             </form>
           </div>
         ) : step === 4 ? (
           <div className="paso-historial">
-            <h2>Historial de Pacientes Pendientes</h2>
+            <h2>Historial de Pacientes</h2>
             <button onClick={() => setStep(1)} className="btn-back">← Atrás</button>
             {loading ? (
               <p className="loading">⏳ Cargando...</p>
-            ) : expedientes.length === 0 ? (
-              <p className="no-data">No hay pacientes pendientes</p>
+            ) : todosPacientes.length === 0 ? (
+              <p className="no-data">No hay pacientes</p>
             ) : (
               <div className="pacientes-lista">
-                {expedientes.map(paciente => (
+                {todosPacientes.map(paciente => (
                   <div key={paciente.id} className="paciente-item">
                     <div className="paciente-info">
                       <h3>👤 {paciente.nombre}</h3>

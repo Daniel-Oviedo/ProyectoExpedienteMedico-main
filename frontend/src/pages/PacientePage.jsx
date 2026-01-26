@@ -18,6 +18,28 @@ export function PacientePage() {
     cargarExpediente()
   }, [user])
 
+  const agruparRegistrosPorConsulta = (registros) => {
+    // Agrupar por fecha (día completo)
+    const agrupados = {}
+    
+    registros.forEach(registro => {
+      const fecha = registro.fechaRegistro 
+        ? new Date(registro.fechaRegistro).toLocaleDateString('es-ES')
+        : 'Sin fecha'
+      
+      if (!agrupados[fecha]) {
+        agrupados[fecha] = []
+      }
+      agrupados[fecha].push(registro)
+    })
+
+    // Convertir a array de consultas
+    return Object.entries(agrupados).map(([fecha, regs]) => ({
+      fecha,
+      registros: regs
+    }))
+  }
+
   const cargarExpediente = async () => {
     setLoading(true)
     try {
@@ -110,67 +132,80 @@ export function PacientePage() {
               </div>
             ) : (
               <div className="registros-list">
-                {registros.map((registro, idx) => (
-                  <div key={registro.id} className="registro-card">
+                {agruparRegistrosPorConsulta(registros).map((consulta, consultaIdx) => (
+                  <div key={consultaIdx} className="registro-card">
                     <div className="registro-header">
-                      <h3>Registro #{idx + 1}</h3>
-                      <span className="fecha">
-                        {registro.fechaRegistro 
-                          ? new Date(registro.fechaRegistro).toLocaleDateString('es-ES')
-                          : 'N/A'}
-                      </span>
+                      <h3>Consulta #{consultaIdx + 1}</h3>
+                      <span className="fecha">{consulta.fecha}</span>
                     </div>
 
-                    {/* Signos Vitales */}
-                    {(registro.presionArterial || registro.peso || registro.altura) && (
-                      <div className="section">
-                        <h4>📈 Signos Vitales</h4>
-                        <div className="data-grid">
-                          {registro.presionArterial && (
-                            <div className="data-item">
-                              <label>Presión Arterial:</label>
-                              <span>{registro.presionArterial}</span>
+                    {/* Mostrar todos los registros de esta consulta */}
+                    {consulta.registros.map((registro) => (
+                      <div key={registro.id}>
+                        {/* Signos Vitales */}
+                        {(registro.presionArterial || registro.peso || registro.altura || registro.temperatura || registro.saturacionOxigeno) && (
+                          <div className="section">
+                            <h4>📈 Signos Vitales</h4>
+                            <div className="data-grid">
+                              {registro.presionArterial && (
+                                <div className="data-item">
+                                  <label>Presión Arterial:</label>
+                                  <span>{registro.presionArterial}</span>
+                                </div>
+                              )}
+                              {registro.peso && (
+                                <div className="data-item">
+                                  <label>Peso:</label>
+                                  <span>{registro.peso} kg</span>
+                                </div>
+                              )}
+                              {registro.altura && (
+                                <div className="data-item">
+                                  <label>Altura:</label>
+                                  <span>{registro.altura} cm</span>
+                                </div>
+                              )}
+                              {registro.temperatura && (
+                                <div className="data-item">
+                                  <label>Temperatura:</label>
+                                  <span>{registro.temperatura} °C</span>
+                                </div>
+                              )}
+                              {registro.saturacionOxigeno && (
+                                <div className="data-item">
+                                  <label>Saturación O₂:</label>
+                                  <span>{registro.saturacionOxigeno} %</span>
+                                </div>
+                              )}
                             </div>
-                          )}
-                          {registro.peso && (
-                            <div className="data-item">
-                              <label>Peso:</label>
-                              <span>{registro.peso} kg</span>
-                            </div>
-                          )}
-                          {registro.altura && (
-                            <div className="data-item">
-                              <label>Altura:</label>
-                              <span>{registro.altura} cm</span>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    )}
+                          </div>
+                        )}
 
-                    {/* Diagnóstico */}
-                    {registro.diagnostico && (
-                      <div className="section">
-                        <h4>🩺 Diagnóstico</h4>
-                        <p className="diagnostico-text">{registro.diagnostico}</p>
-                      </div>
-                    )}
+                        {/* Diagnóstico */}
+                        {registro.diagnostico && (
+                          <div className="section">
+                            <h4>🩺 Diagnóstico</h4>
+                            <p className="diagnostico-text">{registro.diagnostico}</p>
+                          </div>
+                        )}
 
-                    {/* Medicamentos */}
-                    {registro.medicamentos && (
-                      <div className="section">
-                        <h4>💊 Medicamentos</h4>
-                        <p className="medicamentos-text">{registro.medicamentos}</p>
-                      </div>
-                    )}
+                        {/* Medicamentos */}
+                        {registro.medicamentos && (
+                          <div className="section">
+                            <h4>💊 Medicamentos</h4>
+                            <p className="medicamentos-text">{registro.medicamentos}</p>
+                          </div>
+                        )}
 
-                    {/* Observaciones */}
-                    {registro.observaciones && (
-                      <div className="section">
-                        <h4>📝 Observaciones</h4>
-                        <p className="observaciones-text">{registro.observaciones}</p>
+                        {/* Observaciones */}
+                        {registro.observaciones && (
+                          <div className="section">
+                            <h4>📝 Observaciones</h4>
+                            <p className="observaciones-text">{registro.observaciones}</p>
+                          </div>
+                        )}
                       </div>
-                    )}
+                    ))}
                   </div>
                 ))}
               </div>

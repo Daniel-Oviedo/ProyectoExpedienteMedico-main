@@ -10,6 +10,8 @@ public class PacienteConVitalesDTO {
     private String presionArterial;
     private Double peso;
     private Double altura;
+    private Double temperatura;
+    private Double saturacionOxigeno;
     private String observaciones;
 
 }

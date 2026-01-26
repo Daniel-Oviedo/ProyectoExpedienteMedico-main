@@ -66,6 +66,8 @@ public class RegistroMedicoService {
             registro.setPresionArterial(dto.getPresionArterial());
             registro.setPeso(dto.getPeso());
             registro.setAltura(dto.getAltura());
+            registro.setTemperatura(dto.getTemperatura());
+            registro.setSaturacionOxigeno(dto.getSaturacionOxigeno());
 
             registro.setDiagnostico(null);
             registro.setMedicamentos(null);
@@ -93,6 +95,8 @@ public class RegistroMedicoService {
         response.setPresionArterial(guardado.getPresionArterial());
         response.setPeso(guardado.getPeso());
         response.setAltura(guardado.getAltura());
+        response.setTemperatura(guardado.getTemperatura());
+        response.setSaturacionOxigeno(guardado.getSaturacionOxigeno());
         response.setExpedienteId(expediente.getId());
         response.setUsuarioId(usuario.getId());
 
@@ -113,6 +117,8 @@ public class RegistroMedicoService {
                     dto.setPresionArterial(registro.getPresionArterial());
                     dto.setPeso(registro.getPeso());
                     dto.setAltura(registro.getAltura());
+                    dto.setTemperatura(registro.getTemperatura());
+                    dto.setSaturacionOxigeno(registro.getSaturacionOxigeno());
                     dto.setExpedienteId(registro.getExpediente().getId());
                     dto.setUsuarioId(registro.getUsuario().getId());
                     return dto;
