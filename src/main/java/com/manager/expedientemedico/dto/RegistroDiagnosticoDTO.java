@@ -8,6 +8,7 @@ public class RegistroDiagnosticoDTO {
     private Long expedienteId;
     private String diagnostico;
     private String medicamentos;
-    private String observaciones;
+    private String planSeguimiento;
+    private String historiaClinica;
 
 }

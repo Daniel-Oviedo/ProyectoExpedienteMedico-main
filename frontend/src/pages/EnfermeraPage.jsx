@@ -217,15 +217,15 @@ export function EnfermeraPage() {
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="altura">Altura (m):</label>
+                  <label htmlFor="altura">Altura (cm):</label>
                   <input
                     type="number"
                     id="altura"
                     name="altura"
                     value={formData.altura}
                     onChange={handleInputChange}
-                    placeholder="1.75"
-                    step="0.01"
+                    placeholder="175"
+                    step="1"
                     required
                     disabled={loading}
                   />
@@ -265,7 +265,7 @@ export function EnfermeraPage() {
               </div>
 
               <div className="form-group">
-                <label htmlFor="observaciones">Observaciones:</label>
+                <label htmlFor="observaciones">Motivo de Consulta:</label>
                 <textarea
                   id="observaciones"
                   name="observaciones"

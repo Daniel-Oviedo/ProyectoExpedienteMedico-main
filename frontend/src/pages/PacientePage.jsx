@@ -181,10 +181,18 @@ export function PacientePage() {
                           </div>
                         )}
 
-                        {/* Diagnóstico */}
+                        {/* Motivo de Consulta */}
+                        {registro.observaciones && (
+                          <div className="section">
+                            <h4>💬 Motivo de Consulta</h4>
+                            <p className="observaciones-text">{registro.observaciones}</p>
+                          </div>
+                        )}
+
+                        {/* Impresión Diagnóstica */}
                         {registro.diagnostico && (
                           <div className="section">
-                            <h4>🩺 Diagnóstico</h4>
+                            <h4>🩺 Impresión Diagnóstica</h4>
                             <p className="diagnostico-text">{registro.diagnostico}</p>
                           </div>
                         )}
@@ -197,11 +205,19 @@ export function PacientePage() {
                           </div>
                         )}
 
-                        {/* Observaciones */}
-                        {registro.observaciones && (
+                        {/* Plan de Seguimiento */}
+                        {registro.planSeguimiento && (
                           <div className="section">
-                            <h4>📝 Observaciones</h4>
-                            <p className="observaciones-text">{registro.observaciones}</p>
+                            <h4>📋 Plan de Seguimiento</h4>
+                            <p className="planSeguimiento-text">{registro.planSeguimiento}</p>
+                          </div>
+                        )}
+
+                        {/* Historia Clínica */}
+                        {registro.historiaClinica && (
+                          <div className="section">
+                            <h4>📚 Historia Clínica</h4>
+                            <p className="historiaClinica-text">{registro.historiaClinica}</p>
                           </div>
                         )}
                       </div>

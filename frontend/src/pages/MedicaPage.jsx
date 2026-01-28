@@ -18,7 +18,8 @@ export function MedicaPage() {
     expedienteId: null,
     diagnostico: '',
     medicamentos: '',
-    observaciones: ''
+    planSeguimiento: '',
+    historiaClinica: ''
   })
   
   const [loading, setLoading] = useState(false)
@@ -115,7 +116,8 @@ export function MedicaPage() {
           expedienteId: null,
           diagnostico: '',
           medicamentos: '',
-          observaciones: ''
+          planSeguimiento: '',
+          historiaClinica: ''
         })
         cargarExpedientes()
       }, 2000)
@@ -221,7 +223,12 @@ export function MedicaPage() {
 
             <form onSubmit={handleRegistrarDiagnostico}>
               <div className="form-group">
-                <label>Diagnóstico:</label>
+                <label>Historia Clínica:</label>
+                <textarea name="historiaClinica" value={formData.historiaClinica} onChange={handleInputChange} placeholder="Antecedentes, alergias, condiciones previas..." rows="4" disabled={loading} />
+              </div>
+
+              <div className="form-group">
+                <label>Impresión Diagnóstica:</label>
                 <textarea name="diagnostico" value={formData.diagnostico} onChange={handleInputChange} placeholder="Descripción..." rows="4" required disabled={loading} />
               </div>
 
@@ -231,8 +238,8 @@ export function MedicaPage() {
               </div>
 
               <div className="form-group">
-                <label>Observaciones:</label>
-                <textarea name="observaciones" value={formData.observaciones} onChange={handleInputChange} placeholder="Notas..." rows="3" disabled={loading} />
+                <label>Plan de Seguimiento:</label>
+                <textarea name="planSeguimiento" value={formData.planSeguimiento} onChange={handleInputChange} placeholder="Notas..." rows="3" disabled={loading} />
               </div>
 
               {error && <div className="alert alert-error">{error}</div>}
@@ -275,18 +282,60 @@ export function MedicaPage() {
               <p className="no-data">No hay registros</p>
             ) : (
               <div className="historial-completo">
-                {historicoCompleto.map((registro, idx) => (
-                  <div key={registro.id} className="registro-historial">
-                    <h4>Registro #{idx + 1}</h4>
-                    {registro.presionArterial && <p><strong>Presión:</strong> {registro.presionArterial}</p>}
-                    {registro.peso && <p><strong>Peso:</strong> {registro.peso} kg</p>}
-                    {registro.altura && <p><strong>Altura:</strong> {registro.altura} m</p>}
-                    {registro.temperatura && <p><strong>Temperatura:</strong> {registro.temperatura} °C</p>}
-                    {registro.saturacionOxigeno && <p><strong>Sat. O₂:</strong> {registro.saturacionOxigeno} %</p>}
-                    {registro.diagnostico && <p><strong>Diagnóstico:</strong> {registro.diagnostico}</p>}
-                    {registro.medicamentos && <p><strong>Medicamentos:</strong> {registro.medicamentos}</p>}
-                  </div>
-                ))}
+                {historicoCompleto.map((registro) => {
+                  const fecha = registro.fechaRegistro 
+                    ? new Date(registro.fechaRegistro).toLocaleDateString('es-ES')
+                    : 'Sin fecha'
+                  
+                  return (
+                    <div key={registro.id} className="registro-historial">
+                      <div className="registro-fecha">
+                        <h4>📅 {fecha}</h4>
+                      </div>
+                      
+                      {(registro.presionArterial || registro.peso || registro.altura || registro.temperatura || registro.saturacionOxigeno) && (
+                        <div className="registro-seccion">
+                          <h5>📈 Signos Vitales</h5>
+                          <div className="signos-vitales-grid">
+                            {registro.presionArterial && <p><strong>Presión:</strong> {registro.presionArterial}</p>}
+                            {registro.peso && <p><strong>Peso:</strong> {registro.peso} kg</p>}
+                            {registro.altura && <p><strong>Altura:</strong> {registro.altura} m</p>}
+                            {registro.temperatura && <p><strong>Temperatura:</strong> {registro.temperatura} °C</p>}
+                            {registro.saturacionOxigeno && <p><strong>Sat. O₂:</strong> {registro.saturacionOxigeno} %</p>}
+                          </div>
+                        </div>
+                      )}
+                      
+                      {registro.diagnostico && (
+                        <div className="registro-seccion">
+                          <h5>🩺 Impresión Diagnóstica</h5>
+                          <p>{registro.diagnostico}</p>
+                        </div>
+                      )}
+                      
+                      {registro.medicamentos && (
+                        <div className="registro-seccion">
+                          <h5>💊 Medicamentos</h5>
+                          <p>{registro.medicamentos}</p>
+                        </div>
+                      )}
+                      
+                      {registro.planSeguimiento && (
+                        <div className="registro-seccion">
+                          <h5>📋 Plan de Seguimiento</h5>
+                          <p>{registro.planSeguimiento}</p>
+                        </div>
+                      )}
+                      
+                      {registro.historiaClinica && (
+                        <div className="registro-seccion">
+                          <h5>📚 Historia Clínica</h5>
+                          <p>{registro.historiaClinica}</p>
+                        </div>
+                      )}
+                    </div>
+                  )
+                })}
               </div>
             )}
           </div>

@@ -16,6 +16,8 @@ public class RegistroMedicoResponseDTO {
     private String observaciones;
     private String diagnostico;
     private String medicamentos;
+    private String planSeguimiento;
+    private String historiaClinica;
 
     private String presionArterial;
     private Double peso;

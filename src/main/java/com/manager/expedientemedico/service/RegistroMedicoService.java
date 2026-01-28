@@ -114,6 +114,8 @@ public class RegistroMedicoService {
                     dto.setObservaciones(registro.getObservaciones());
                     dto.setDiagnostico(registro.getDiagnostico());
                     dto.setMedicamentos(registro.getMedicamentos());
+                    dto.setPlanSeguimiento(registro.getPlanSeguimiento());
+                    dto.setHistoriaClinica(registro.getHistoriaClinica());
                     dto.setPresionArterial(registro.getPresionArterial());
                     dto.setPeso(registro.getPeso());
                     dto.setAltura(registro.getAltura());
@@ -142,7 +144,8 @@ public class RegistroMedicoService {
         registro.setUsuario(medica);
         registro.setDiagnostico(dto.getDiagnostico());
         registro.setMedicamentos(dto.getMedicamentos());
-        registro.setObservaciones(dto.getObservaciones());
+        registro.setPlanSeguimiento(dto.getPlanSeguimiento());
+        registro.setHistoriaClinica(dto.getHistoriaClinica());
 
         RegistroMedico guardado = registroRepository.save(registro);
         
@@ -156,6 +159,8 @@ public class RegistroMedicoService {
         response.setObservaciones(guardado.getObservaciones());
         response.setDiagnostico(guardado.getDiagnostico());
         response.setMedicamentos(guardado.getMedicamentos());
+        response.setPlanSeguimiento(guardado.getPlanSeguimiento());
+        response.setHistoriaClinica(guardado.getHistoriaClinica());
         response.setExpedienteId(expediente.getId());
         response.setUsuarioId(medica.getId());
 

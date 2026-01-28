@@ -34,6 +34,13 @@ public class RegistroMedico {
 
     @Column(columnDefinition = "TEXT")
     private String medicamentos;
+    
+    @Column(columnDefinition = "TEXT")
+    private String planSeguimiento;
+    
+    @Column(columnDefinition = "TEXT")
+    private String historiaClinica;
+    
     private String presionArterial;
     private Double peso;
     private Double altura;
