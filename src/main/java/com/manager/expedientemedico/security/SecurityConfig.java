@@ -34,7 +34,7 @@ public class SecurityConfig {
                 .httpBasic(httpBasic -> httpBasic.disable())
                 .formLogin(form -> form.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/login", "/auth/registro").permitAll()
+                        .requestMatchers("/auth/login").permitAll()
                         .requestMatchers(request -> 
                                 request.getMethod().equals("GET") && request.getRequestURI().startsWith("/api/registros-medicos"))
                         .authenticated()
