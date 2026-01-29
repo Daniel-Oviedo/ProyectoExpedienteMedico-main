@@ -206,15 +206,28 @@ export function MedicaPage() {
 
             {registros.length > 0 && (
               <div className="registros-section">
-                <h3>📊 Signos Vitales</h3>
+                <h3>📊 Información de la Consulta</h3>
                 <div className="registros-grid">
                   {registros.map(registro => (
                     <div key={registro.id} className="registro-card">
-                      <p><strong>Presión Arterial:</strong> {registro.presionArterial || 'N/A'}</p>
-                      <p><strong>Peso:</strong> {registro.peso || 'N/A'} kg</p>
-                      <p><strong>Altura:</strong> {registro.altura || 'N/A'} m</p>
-                      <p><strong>Temperatura:</strong> {registro.temperatura ? `${registro.temperatura} °C` : 'N/A'}</p>
-                      <p><strong>Saturación O₂:</strong> {registro.saturacionOxigeno ? `${registro.saturacionOxigeno} %` : 'N/A'}</p>
+                      {registro.observaciones && (
+                        <>
+                          <div className="registro-subseccion">
+                            <h4>💬 Motivo de Consulta</h4>
+                            <p>{registro.observaciones}</p>
+                          </div>
+                          <hr className="registro-divider" />
+                        </>
+                      )}
+                      
+                      <div className="registro-subseccion">
+                        <h4>📈 Signos Vitales</h4>
+                        <p><strong>Presión Arterial:</strong> {registro.presionArterial || 'N/A'}</p>
+                        <p><strong>Peso:</strong> {registro.peso || 'N/A'} kg</p>
+                        <p><strong>Altura:</strong> {registro.altura || 'N/A'} m</p>
+                        <p><strong>Temperatura:</strong> {registro.temperatura ? `${registro.temperatura} °C` : 'N/A'}</p>
+                        <p><strong>Saturación O₂:</strong> {registro.saturacionOxigeno ? `${registro.saturacionOxigeno} %` : 'N/A'}</p>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -282,60 +295,92 @@ export function MedicaPage() {
               <p className="no-data">No hay registros</p>
             ) : (
               <div className="historial-completo">
-                {historicoCompleto.map((registro) => {
-                  const fecha = registro.fechaRegistro 
-                    ? new Date(registro.fechaRegistro).toLocaleDateString('es-ES')
-                    : 'Sin fecha'
+                {(() => {
+                  // Agrupar registros por fecha
+                  const registrosPorFecha = {}
+                  historicoCompleto.forEach(registro => {
+                    const fecha = registro.fechaRegistro 
+                      ? new Date(registro.fechaRegistro).toLocaleDateString('es-ES')
+                      : 'Sin fecha'
+                    
+                    if (!registrosPorFecha[fecha]) {
+                      registrosPorFecha[fecha] = []
+                    }
+                    registrosPorFecha[fecha].push(registro)
+                  })
                   
-                  return (
-                    <div key={registro.id} className="registro-historial">
-                      <div className="registro-fecha">
-                        <h4>📅 {fecha}</h4>
+                  return Object.entries(registrosPorFecha)
+                    .sort((a, b) => new Date(b[0]) - new Date(a[0]))
+                    .map(([fecha, registros]) => (
+                      <div key={fecha} className="registro-historial">
+                        <div className="registro-fecha">
+                          <h4>📅 {fecha}</h4>
+                        </div>
+                        
+                        <div className="consultas-grid">
+                          {registros.map((registro, idx) => (
+                            <div key={registro.id} className="registro-contenido">
+                              {registros.length > 1 && (
+                                <div className="numero-consulta">
+                                  <p><strong>Consulta #{idx + 1}</strong></p>
+                                </div>
+                              )}
+                            
+                            {registro.observaciones && (
+                              <div className="registro-seccion">
+                                <h5>💬 Motivo de Consulta</h5>
+                                <p>{registro.observaciones}</p>
+                              </div>
+                            )}
+                            
+                            {(registro.presionArterial || registro.peso || registro.altura || registro.temperatura || registro.saturacionOxigeno) && (
+                              <div className="registro-seccion">
+                                <h5>📈 Signos Vitales</h5>
+                                <div className="signos-vitales-grid">
+                                  {registro.presionArterial && <p><strong>Presión:</strong> {registro.presionArterial}</p>}
+                                  {registro.peso && <p><strong>Peso:</strong> {registro.peso} kg</p>}
+                                  {registro.altura && <p><strong>Altura:</strong> {registro.altura} m</p>}
+                                  {registro.temperatura && <p><strong>Temperatura:</strong> {registro.temperatura} °C</p>}
+                                  {registro.saturacionOxigeno && <p><strong>Sat. O₂:</strong> {registro.saturacionOxigeno} %</p>}
+                                </div>
+                              </div>
+                            )}
+                            
+                            {registro.diagnostico && (
+                              <div className="registro-seccion">
+                                <h5>🩺 Impresión Diagnóstica</h5>
+                                <p>{registro.diagnostico}</p>
+                              </div>
+                            )}
+                            
+                            {registro.medicamentos && (
+                              <div className="registro-seccion">
+                                <h5>💊 Medicamentos</h5>
+                                <p>{registro.medicamentos}</p>
+                              </div>
+                            )}
+                            
+                            {registro.planSeguimiento && (
+                              <div className="registro-seccion">
+                                <h5>📋 Plan de Seguimiento</h5>
+                                <p>{registro.planSeguimiento}</p>
+                              </div>
+                            )}
+                            
+                            {registro.historiaClinica && (
+                              <div className="registro-seccion">
+                                <h5>📚 Historia Clínica</h5>
+                                <p>{registro.historiaClinica}</p>
+                              </div>
+                            )}
+                            
+                            {idx < registros.length - 1 && <hr className="registro-divider" />}
+                            </div>
+                          ))}
+                        </div>
                       </div>
-                      
-                      {(registro.presionArterial || registro.peso || registro.altura || registro.temperatura || registro.saturacionOxigeno) && (
-                        <div className="registro-seccion">
-                          <h5>📈 Signos Vitales</h5>
-                          <div className="signos-vitales-grid">
-                            {registro.presionArterial && <p><strong>Presión:</strong> {registro.presionArterial}</p>}
-                            {registro.peso && <p><strong>Peso:</strong> {registro.peso} kg</p>}
-                            {registro.altura && <p><strong>Altura:</strong> {registro.altura} m</p>}
-                            {registro.temperatura && <p><strong>Temperatura:</strong> {registro.temperatura} °C</p>}
-                            {registro.saturacionOxigeno && <p><strong>Sat. O₂:</strong> {registro.saturacionOxigeno} %</p>}
-                          </div>
-                        </div>
-                      )}
-                      
-                      {registro.diagnostico && (
-                        <div className="registro-seccion">
-                          <h5>🩺 Impresión Diagnóstica</h5>
-                          <p>{registro.diagnostico}</p>
-                        </div>
-                      )}
-                      
-                      {registro.medicamentos && (
-                        <div className="registro-seccion">
-                          <h5>💊 Medicamentos</h5>
-                          <p>{registro.medicamentos}</p>
-                        </div>
-                      )}
-                      
-                      {registro.planSeguimiento && (
-                        <div className="registro-seccion">
-                          <h5>📋 Plan de Seguimiento</h5>
-                          <p>{registro.planSeguimiento}</p>
-                        </div>
-                      )}
-                      
-                      {registro.historiaClinica && (
-                        <div className="registro-seccion">
-                          <h5>📚 Historia Clínica</h5>
-                          <p>{registro.historiaClinica}</p>
-                        </div>
-                      )}
-                    </div>
-                  )
-                })}
+                    ))
+                })()}
               </div>
             )}
           </div>

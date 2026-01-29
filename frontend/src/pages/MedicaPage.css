@@ -420,6 +420,41 @@
   margin-bottom: 20px;
 }
 
+.registro-fecha {
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #0052a3;
+}
+
+.registro-fecha h4 {
+  margin: 0;
+  color: #0052a3;
+}
+
+.consultas-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-top: 15px;
+  align-items: start;
+}
+
+.registro-contenido {
+  border: 1px solid #f0f0f0;
+  border-radius: 6px;
+  padding: 15px;
+  background-color: #fafafa;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+@media (max-width: 768px) {
+  .consultas-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .registro-header {
   display: flex;
   justify-content: space-between;
