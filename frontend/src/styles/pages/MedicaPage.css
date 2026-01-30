@@ -1,0 +1,700 @@
+.medica-container {
+  min-height: 100vh;
+  background: #f5f6f8;
+  padding: 30px 20px;
+}
+
+.medica-header {
+  background: linear-gradient(135deg, #0052a3 0%, #003d7a 100%);
+  color: white;
+  padding: 25px 35px;
+  border-radius: 12px;
+  margin-bottom: 40px;
+  box-shadow: 0 10px 30px rgba(0, 82, 163, 0.2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 30px;
+}
+
+.header-content {
+  flex: 1;
+}
+
+.medica-header h1 {
+  color: white;
+  margin: 0 0 5px 0;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.medica-header p {
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.btn-volver {
+  background-color: transparent;
+  color: white;
+  border: 2px solid white;
+  padding: 12px 28px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.btn-volver:hover {
+  background-color: white;
+  color: #0052a3;
+  border-color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-back {
+  background-color: transparent;
+  color: #0052a3;
+  border: 2px solid #0052a3;
+  padding: 10px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  font-size: 14px;
+  white-space: nowrap;
+  justify-self: end;
+}
+
+.btn-back:hover {
+  background-color: #0052a3;
+  color: white;
+  border-color: #0052a3;
+}
+
+/* Botón atrás en header */
+.medica-header .btn-back {
+  background-color: transparent;
+  color: white;
+  border: 2px solid white;
+}
+
+.medica-header .btn-back:hover {
+  background-color: white;
+  color: #0052a3;
+  border-color: white;
+}
+
+.medica-card {
+  max-width: 1000px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e5e7eb;
+}
+
+.paso-menu {
+  text-align: center;
+  margin-bottom: 50px;
+  padding: 0 20px;
+}
+
+.paso-menu h2 {
+  margin: 0 0 35px 0;
+  color: #1a1a2e;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.menu-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+  margin-bottom: 30px;
+  max-width: 650px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 20px;
+}
+
+.menu-buttons button {
+  padding: 28px 24px;
+  border: 2px solid #e5e7eb;
+  background: white;
+  color: #1a1a2e;
+  border-radius: 14px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  font-size: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  min-height: 160px;
+  justify-content: center;
+}
+
+.menu-buttons button .icon {
+  font-size: 45px;
+  display: block;
+}
+
+.menu-buttons button .text {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.menu-buttons button:hover,
+.menu-buttons button.active {
+  background: linear-gradient(135deg, #0052a3 0%, #003d7a 100%);
+  color: white;
+  border-color: #0052a3;
+  box-shadow: 0 8px 24px rgba(0, 82, 163, 0.25);
+  transform: translateY(-2px);
+}
+
+.paso-expedientes,
+.paso-historial {
+  margin-bottom: 30px;
+}
+
+.lista-header {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  margin-bottom: 30px;
+  gap: 20px;
+  position: relative;
+}
+
+.lista-header h2 {
+  grid-column: 2;
+  margin: 0;
+  color: #1a1a2e;
+  font-size: 20px;
+  font-weight: 700;
+  cursor: default;
+  white-space: nowrap;
+}
+
+.expedientes-lista,
+.pacientes-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.expediente-item,
+.paciente-item {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 18px 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.expediente-item:hover,
+.paciente-item:hover {
+  background: #f9fafb;
+  border-color: #0052a3;
+  box-shadow: 0 4px 12px rgba(0, 82, 163, 0.1);
+  transform: translateX(4px);
+}
+
+.expediente-info,
+.paciente-info {
+  flex: 1;
+  text-align: center;
+}
+
+.expediente-info h3,
+.paciente-info h3 {
+  margin: 0 0 8px 0;
+  color: #1a1a2e;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.expediente-info p,
+.paciente-info p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.expediente-action,
+.paciente-action {
+  flex-shrink: 0;
+}
+
+.expediente-action .arrow,
+.paciente-action .arrow {
+  color: #0052a3;
+  font-size: 24px;
+  font-weight: 700;
+  transition: all 0.3s ease;
+}
+
+.expediente-item:hover .arrow,
+.paciente-item:hover .arrow {
+  transform: translateX(4px);
+}
+
+.expediente-info-card {
+  background: #e6f2ff;
+  border: 2px solid #0052a3;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.info-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #0052a3;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.info-value {
+  font-size: 14px;
+  color: #1a1a2e;
+  font-weight: 600;
+}
+
+.paso-diagnostico {
+  margin-bottom: 30px;
+}
+
+.form-diagnostico {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 18px;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-weight: 600;
+  color: #1a1a2e;
+  margin-bottom: 8px;
+  font-size: 13px;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  padding: 10px 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: inherit;
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #0052a3;
+  box-shadow: 0 0 0 3px #e6f2ff;
+}
+
+.registros-section {
+  margin-bottom: 30px;
+}
+
+.registros-section h3 {
+  color: #1a1a2e;
+  border-bottom: 2px solid #0052a3;
+  padding-bottom: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0 0 20px 0;
+}
+
+.registro-historial {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.registro-item {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.registro-item h4 {
+  margin: 0 0 10px 0;
+  color: #1a1a2e;
+  font-weight: 700;
+}
+
+.paso-historial-detalle {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px 0;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.history-item {
+  padding: 15px;
+  background: white;
+  border-left: 4px solid #0052a3;
+  border-radius: 4px;
+}
+
+.history-item h5 {
+  margin: 0 0 8px 0;
+  color: #1a1a2e;
+  font-weight: 700;
+}
+
+.history-item p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.form-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.btn-primary,
+.btn-secondary {
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #0052a3 0%, #003d7a 100%);
+  color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(0, 82, 163, 0.3);
+}
+
+.btn-secondary {
+  background: #e5e7eb;
+  color: #1a1a2e;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: #d1d5db;
+}
+
+.btn-primary:disabled,
+.btn-secondary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.alert {
+  padding: 14px 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-weight: 500;
+  border-left: 4px solid;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.alert-error {
+  background-color: #fee2e2;
+  color: #991b1b;
+  border-left-color: #dc2626;
+}
+
+.alert-success {
+  background-color: #dcfce7;
+  color: #166534;
+  border-left-color: #22c55e;
+}
+
+/* Estilos para Historial Detalle */
+.historial-detalle {
+  padding: 0;
+}
+
+.historial-paciente-info {
+  background: linear-gradient(135deg, #0052a3 0%, #003d7a 100%);
+  color: white;
+  padding: 25px;
+  border-radius: 12px 12px 0 0;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 12px rgba(0, 82, 163, 0.1);
+}
+
+.historial-paciente-info h2 {
+  margin: 0 0 10px 0;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.historial-paciente-info p {
+  margin: 0;
+  font-size: 14px;
+  opacity: 0.95;
+}
+
+.historial-vacio {
+  background: #f9fafb;
+  border: 2px dashed #e5e7eb;
+  border-radius: 8px;
+  padding: 40px;
+  text-align: center;
+  color: #6b7280;
+}
+
+.consultas-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  margin-bottom: 30px;
+}
+
+.consulta-card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.consulta-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 82, 163, 0.1);
+  border-color: #0052a3;
+}
+
+.fecha-header {
+  background: linear-gradient(135deg, #e6f2ff 0%, #f0f7ff 100%);
+  border-bottom: 2px solid #0052a3;
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.fecha-header h4 {
+  margin: 0;
+  color: #0052a3;
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.num-registros {
+  background: #0052a3;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.consulta-contenido {
+  padding: 20px;
+}
+
+.registro-contenido {
+  margin-bottom: 20px;
+}
+
+.registro-contenido:last-child {
+  margin-bottom: 0;
+}
+
+.numero-consulta {
+  background: #f0f7ff;
+  border-left: 4px solid #0052a3;
+  padding: 10px 15px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+}
+
+.numero-consulta p {
+  margin: 0;
+  color: #0052a3;
+  font-size: 13px;
+}
+
+.registro-seccion {
+  margin-bottom: 18px;
+  padding: 15px;
+  background: #f9fafb;
+  border-radius: 6px;
+  border-left: 3px solid #0052a3;
+}
+
+.registro-seccion h5 {
+  margin: 0 0 10px 0;
+  color: #1a1a2e;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.registro-seccion p {
+  margin: 0;
+  color: #4b5563;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.signos-vitales-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.signos-vitales-grid p {
+  background: white;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #e5e7eb;
+  font-size: 12px;
+}
+
+.registro-divider {
+  border: none;
+  border-top: 1px solid #e5e7eb;
+  margin: 15px 0;
+}
+
+.btn-back {
+  width: 100%;
+  padding: 12px;
+  background: #0052a3;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+}
+
+.btn-back:hover {
+  background: #003d7a;
+  box-shadow: 0 4px 12px rgba(0, 82, 163, 0.2);
+}
+
+@media (max-width: 768px) {
+  .paciente-info {
+    padding: 20px;
+  }
+
+  .fecha-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .signos-vitales-grid {
+    grid-template-columns: 1fr;
+  }
+  .medica-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+    padding: 20px 25px;
+  }
+
+  .header-content {
+    width: 100%;
+  }
+
+  .medica-header h1 {
+    font-size: 20px;
+  }
+
+  .medica-header p {
+    font-size: 12px;
+  }
+
+  .btn-volver {
+    width: 100%;
+    text-align: center;
+  }
+
+  .menu-buttons {
+    grid-template-columns: 1fr;
+    max-width: 100%;
+  }
+
+  .menu-buttons button {
+    min-height: 140px;
+    padding: 20px 16px;
+  }
+
+  .expediente-info-card {
+    grid-template-columns: 1fr;
+  }
+
+  .form-buttons {
+    grid-template-columns: 1fr;
+  }
+}

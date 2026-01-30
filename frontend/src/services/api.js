@@ -49,6 +49,24 @@ export const usuariosAPI = {
     api.get('/api/usuarios/perfil'),
 }
 
+// ============ PACIENTES ENDPOINTS ============
+export const pacientesAPI = {
+  crear: (datos) =>
+    api.post('/auth/registro', datos),
+  
+  listar: () =>
+    api.get('/api/pacientes'),
+  
+  buscarPorCedula: (cedula) =>
+    api.get('/api/pacientes/buscar', { params: { cedula } }),
+  
+  listarSinDiagnostico: () =>
+    api.get('/api/pacientes/sin-diagnostico'),
+  
+  registrarConVitales: (datos) =>
+    api.post('/api/pacientes/registrar-con-vitales', datos),
+}
+
 // ============ EXPEDIENTES ENDPOINTS ============
 export const expedientesAPI = {
   listar: () =>
@@ -59,6 +77,9 @@ export const expedientesAPI = {
   
   obtenerMio: () =>
     api.get('/api/expedientes/mio'),
+  
+  obtenerPorPaciente: (pacienteId) =>
+    api.get(`/api/expedientes/paciente/${pacienteId}`),
   
   crear: (pacienteId) =>
     api.post('/api/expedientes', { pacienteId }),
@@ -71,6 +92,9 @@ export const registrosMedicosAPI = {
   
   crear: (datos) =>
     api.post('/api/registros-medicos', datos),
+  
+  registrarDiagnostico: (datos) =>
+    api.post('/api/registros-medicos/diagnostico', datos),
 }
 
 export default api

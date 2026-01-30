@@ -10,7 +10,7 @@ import { CrearRegistroPage } from './pages/CrearRegistroPage'
 import { EnfermeraPage } from './pages/EnfermeraPage'
 import { MedicaPage } from './pages/MedicaPage'
 import { PacientePage } from './pages/PacientePage'
-import './App.css'
+import './styles/components.css'
 
 function App() {
   return (
@@ -83,8 +83,8 @@ function App() {
             }
           />
 
-          {/* Redirigir root a dashboard o login */}
-          <Route path="/" element={<Navigate to="/dashboard" />} />
+          {/* Redirigir root a login */}
+          <Route path="/" element={<Navigate to="/login" />} />
         </Routes>
       </AuthProvider>
     </Router>

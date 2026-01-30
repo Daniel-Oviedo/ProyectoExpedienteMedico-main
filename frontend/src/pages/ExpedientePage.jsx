@@ -1,85 +1,49 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { expedientesAPI } from '../services/api'
-import './ExpedientePage.css'
+import { useFetchExpedientes } from '../hooks'
+import { Button, Card, Alert } from '../components/ui'
+import { ExpedienteInfo } from '../components/expediente/ExpedienteInfo'
+import { ExpedienteActions } from '../components/expediente/ExpedienteActions'
+import { ROUTES, buildRoute, MESSAGES } from '../constants'
+import '../styles/pages/ExpedientePage.css'
 
 export function ExpedientePage() {
-  const [expediente, setExpediente] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
   const navigate = useNavigate()
+  const { expediente, loading, error } = useFetchExpedientes()
 
-  useEffect(() => {
-    cargarExpediente()
-  }, [])
-
-  const cargarExpediente = async () => {
-    try {
-      setLoading(true)
-      const response = await expedientesAPI.obtenerMio()
-      setExpediente(response.data)
-    } catch (err) {
-      setError(err.response?.data?.message || 'Error al cargar expediente')
-    } finally {
-      setLoading(false)
-    }
+  const handleVerRegistros = () => {
+    navigate(buildRoute(ROUTES.REGISTROS, { expedienteId: expediente.id }))
   }
 
-  if (loading) return <div className="loading">Cargando expediente...</div>
-  if (error) return <div className="error">{error}</div>
+  const handleCrearRegistro = () => {
+    navigate(buildRoute(ROUTES.CREAR_REGISTRO, { expedienteId: expediente.id }))
+  }
+
+  if (loading) return <div className="loading">{MESSAGES.LOADING_EXPEDIENTE}</div>
+  if (error) return <Alert type="error">{error}</Alert>
 
   return (
     <div className="expediente-container">
       <div className="expediente-header">
         <h1>Mi Expediente Médico</h1>
-        <button onClick={() => navigate('/dashboard')} className="btn-back">
-          Volver
-        </button>
+        <Button 
+          variant="secondary"
+          onClick={() => navigate(ROUTES.DASHBOARD)}
+          className="btn-back"
+        >
+          ← Volver
+        </Button>
       </div>
 
       {expediente && (
-        <div className="expediente-card">
-          <div className="expediente-info">
-            <h2>Detalles del Expediente</h2>
-            <div className="info-grid">
-              <div className="info-item">
-                <label>ID del Expediente:</label>
-                <span>{expediente.id}</span>
-              </div>
-              <div className="info-item">
-                <label>Estado:</label>
-                <span className={`status ${expediente.estado.toLowerCase()}`}>
-                  {expediente.estado}
-                </span>
-              </div>
-              <div className="info-item">
-                <label>Fecha de Creación:</label>
-                <span>{new Date(expediente.fechaCreacion).toLocaleDateString('es-ES')}</span>
-              </div>
-              <div className="info-item">
-                <label>ID del Paciente:</label>
-                <span>{expediente.pacienteId}</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="expediente-actions">
-            <button 
-              onClick={() => navigate(`/registros/${expediente.id}`)}
-              className="btn-primary"
-            >
-              📋 Ver Registros Médicos
-            </button>
-            {expediente.estado === 'ACTIVO' && (
-              <button 
-                onClick={() => navigate(`/crear-registro/${expediente.id}`)}
-                className="btn-secondary"
-              >
-                ➕ Crear Nuevo Registro
-              </button>
-            )}
-          </div>
-        </div>
+        <>
+          <ExpedienteInfo expediente={expediente} />
+          <ExpedienteActions
+            expediente={expediente}
+            onVerRegistros={handleVerRegistros}
+            onCrearRegistro={handleCrearRegistro}
+          />
+        </>
       )}
     </div>
   )

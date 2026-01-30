@@ -1,0 +1,287 @@
+.registros-medico-container {
+  min-height: 100vh;
+  background: #f5f6f8;
+  padding: 30px 20px;
+}
+
+.registros-header {
+  background: linear-gradient(135deg, #0052a3 0%, #003d7a 100%);
+  color: white;
+  padding: 30px;
+  border-radius: 12px;
+  margin-bottom: 30px;
+  box-shadow: 0 10px 30px rgba(0, 82, 163, 0.2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.registros-header h1 {
+  color: white;
+  margin: 0;
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.btn-back {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  padding: 10px 24px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-back:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+.registros-medico-card {
+  max-width: 1000px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e5e7eb;
+}
+
+.filtros-section {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 30px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.filtro-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.filtro-group label {
+  font-weight: 600;
+  color: #1a1a2e;
+  font-size: 13px;
+}
+
+.filtro-group input,
+.filtro-group select {
+  padding: 10px 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: inherit;
+  transition: all 0.3s ease;
+}
+
+.filtro-group input:focus,
+.filtro-group select:focus {
+  outline: none;
+  border-color: #0052a3;
+  box-shadow: 0 0 0 3px #e6f2ff;
+}
+
+.btn-filtrar {
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #0052a3 0%, #003d7a 100%);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  align-self: flex-end;
+}
+
+.btn-filtrar:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 82, 163, 0.2);
+}
+
+.registros-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.registro-card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 20px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.registro-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-color: #0052a3;
+}
+
+.registro-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #00a86b;
+}
+
+.registro-card-header h3 {
+  margin: 0;
+  color: #1a1a2e;
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.registro-date {
+  color: #6b7280;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.vitales-info,
+.diagnostico-info {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.info-section {
+  padding: 12px;
+  border-radius: 6px;
+  border-left: 3px solid;
+  font-size: 13px;
+}
+
+.vitales-info .info-section {
+  background: #f0faf5;
+  border-left-color: #00a86b;
+}
+
+.diagnostico-info .info-section {
+  background: #fff3f0;
+  border-left-color: #ff6b35;
+}
+
+.info-section label {
+  color: #6b7280;
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  display: block;
+}
+
+.info-section span {
+  color: #1a1a2e;
+  font-weight: 600;
+  display: block;
+}
+
+.observaciones {
+  background: #e6f2ff;
+  padding: 12px;
+  border-radius: 6px;
+  border-left: 3px solid #0052a3;
+  margin-top: 12px;
+}
+
+.observaciones strong {
+  color: #1a1a2e;
+  display: block;
+  margin-bottom: 6px;
+  font-size: 12px;
+}
+
+.observaciones p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.data-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.data-label {
+  color: #6b7280;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.data-value {
+  color: #1a1a2e;
+  font-weight: 600;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.empty-state p {
+  margin: 0;
+}
+
+.badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.badge-success {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.badge-warning {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.badge-danger {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+@media (max-width: 768px) {
+  .registros-header {
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
+  }
+
+  .filtros-section {
+    grid-template-columns: 1fr;
+  }
+
+  .vitales-info,
+  .diagnostico-info {
+    grid-template-columns: 1fr;
+  }
+
+  .registro-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}

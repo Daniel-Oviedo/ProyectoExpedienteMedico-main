@@ -1,73 +1,92 @@
-import { useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import './LoginPage.css'
+import { useFormValidation } from '../hooks'
+import { Input, Button, Card, Alert } from '../components/ui'
+import { MESSAGES, ROUTES, buildRoute } from '../constants'
+import { esEmailValido } from '../utils'
+import '../styles/pages/LoginPage.css'
 
 export function LoginPage() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
-  
-  const { login } = useAuth()
   const navigate = useNavigate()
+  const { login } = useAuth()
+  
+  const {
+    formData,
+    errors,
+    isSubmitting,
+    handleChange,
+    handleSubmit,
+    setFieldError
+  } = useFormValidation(
+    { email: '', password: '' },
+    async (data) => {
+      try {
+        await login(data.email, data.password)
+        navigate(ROUTES.DASHBOARD)
+      } catch (err) {
+        setFieldError('email', err.message || MESSAGES.ERROR_LOGIN)
+      }
+    }
+  )
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    setError('')
-    setLoading(true)
-
-    try {
-      await login(email, password)
-      navigate('/dashboard')
-    } catch (err) {
-      setError(err.message)
-    } finally {
-      setLoading(false)
+  const handleInputChange = (e) => {
+    const { name, value } = e.target
+    handleChange({ target: { name, value } })
+    
+    // Validación en tiempo real
+    if (name === 'email' && value && !esEmailValido(value)) {
+      setFieldError(name, MESSAGES.EMAIL_INVALID)
+    } else if (name === 'email') {
+      setFieldError(name, '')
     }
   }
 
   return (
     <div className="login-container">
-      <div className="login-card">
-        <h1>Sistema de Expediente Médico</h1>
-        
-        <form onSubmit={handleSubmit}>
-          {error && <div className="error-message">{error}</div>}
+      <Card title="Iniciar Sesión" className="login-card">
+        <form onSubmit={(e) => handleSubmit(e, {
+          email: { required: true, pattern: { test: () => esEmailValido(formData.email) } },
+          password: { required: true }
+        })}>
+          <Input
+            label="Email"
+            name="email"
+            type="email"
+            value={formData.email}
+            onChange={handleInputChange}
+            placeholder="tu@email.com"
+            error={errors.email}
+            required
+          />
 
-          <div className="form-group">
-            <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              placeholder="ejemplo@correo.com"
-            />
-          </div>
+          <Input
+            label="Contraseña"
+            name="password"
+            type="password"
+            value={formData.password}
+            onChange={handleChange}
+            placeholder="••••••••"
+            error={errors.password}
+            required
+          />
 
-          <div className="form-group">
-            <label htmlFor="password">Contraseña</label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              placeholder="Tu contraseña"
-            />
-          </div>
+          {errors.email && <Alert type="error">{errors.email}</Alert>}
 
-          <button type="submit" disabled={loading} className="btn-login">
-            {loading ? 'Cargando...' : 'Iniciar Sesión'}
-          </button>
+          <Button
+            type="submit"
+            variant="primary"
+            size="md"
+            loading={isSubmitting}
+            className="w-full"
+          >
+            Ingresar
+          </Button>
+
+          <p className="registro-link">
+            ¿No tienes cuenta? <a href={ROUTES.REGISTRO}>Regístrate aquí</a>
+          </p>
         </form>
-
-        <p className="registro-link">
-          ¿No tienes cuenta? <Link to="/registro">Regístrate aquí</Link>
-        </p>
-      </div>
+      </Card>
     </div>
   )
 }

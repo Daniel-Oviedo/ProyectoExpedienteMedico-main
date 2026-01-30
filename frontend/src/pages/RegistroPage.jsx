@@ -1,191 +1,172 @@
 import { useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
-import api from '../services/api'
-import './RegistroPage.css'
+import { useNavigate } from 'react-router-dom'
+import { useFormValidation } from '../hooks'
+import { Input, Button, Card, Alert } from '../components/ui'
+import { MESSAGES, ROUTES } from '../constants'
+import { esEmailValido, esPasswordFuerte, esIdentificacionValida } from '../utils'
+import { pacienteService } from '../services'
+import '../styles/pages/RegistroPage.css'
 
 export function RegistroPage() {
   const navigate = useNavigate()
+  const [alertMessage, setAlertMessage] = useState(null)
+  const [alertType, setAlertType] = useState('success')
   
-  const [formData, setFormData] = useState({
-    cedula: '',
-    nombre: '',
-    email: '',
-    password: '',
-    confirmarPassword: ''
-  })
-  
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
-  const [success, setSuccess] = useState('')
+  const {
+    formData,
+    errors,
+    isSubmitting,
+    handleChange,
+    handleSubmit,
+    setFieldError
+  } = useFormValidation(
+    {
+      cedula: '',
+      nombre: '',
+      email: '',
+      password: '',
+      confirmarPassword: ''
+    },
+    async (data) => {
+      try {
+        // Validaciones adicionales
+        if (!esIdentificacionValida(data.cedula)) {
+          throw new Error('Cédula inválida')
+        }
+
+        const passwordCheck = esPasswordFuerte(data.password)
+        if (!passwordCheck.esValida) {
+          throw new Error('Contraseña débil. ' + passwordCheck.mensajes.join(', '))
+        }
+
+        if (data.password !== data.confirmarPassword) {
+          setFieldError('confirmarPassword', 'Las contraseñas no coinciden')
+          throw new Error('Las contraseñas no coinciden')
+        }
+
+        await pacienteService.crear({
+          cedula: data.cedula,
+          nombre: data.nombre,
+          email: data.email,
+          password: data.password,
+          rolId: 1
+        })
+
+        setAlertMessage(MESSAGES.SUCCESS_REGISTRO)
+        setAlertType('success')
+        
+        setTimeout(() => {
+          navigate(ROUTES.LOGIN)
+        }, 2000)
+      } catch (err) {
+        setAlertMessage(err.message || MESSAGES.ERROR_REGISTRO)
+        setAlertType('error')
+      }
+    }
+  )
 
   const handleInputChange = (e) => {
     const { name, value } = e.target
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }))
-  }
-
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    setError('')
-    setSuccess('')
-
-    // Validaciones
-    if (!formData.cedula.trim()) {
-      setError('La cédula es requerida')
-      return
-    }
-    if (!formData.nombre.trim()) {
-      setError('El nombre es requerido')
-      return
-    }
-    if (!formData.email.trim()) {
-      setError('El email es requerido')
-      return
-    }
-    if (!formData.password.trim()) {
-      setError('La contraseña es requerida')
-      return
-    }
-    if (formData.password.length < 4) {
-      setError('La contraseña debe tener al menos 4 caracteres')
-      return
-    }
-    if (formData.password !== formData.confirmarPassword) {
-      setError('Las contraseñas no coinciden')
-      return
-    }
-
-    setLoading(true)
-
-    try {
-      await api.post('/auth/registro', {
-        cedula: formData.cedula,
-        nombre: formData.nombre,
-        email: formData.email,
-        password: formData.password,
-        rolId: 1 // PACIENTE role ID = 1
-      })
-
-      setSuccess('Registro exitoso. Redirigiendo a login...')
-      
-      setTimeout(() => {
-        navigate('/login')
-      }, 2000)
-    } catch (err) {
-      setError(err.response?.data?.message || 'Error al registrarse. Verifica los datos.')
-    } finally {
-      setLoading(false)
+    handleChange({ target: { name, value } })
+    
+    // Validación en tiempo real
+    if (name === 'email' && value && !esEmailValido(value)) {
+      setFieldError(name, MESSAGES.EMAIL_INVALID)
+    } else if (name === 'cedula' && value && !esIdentificacionValida(value)) {
+      setFieldError(name, 'Cédula inválida')
+    } else {
+      setFieldError(name, '')
     }
   }
 
   return (
     <div className="registro-container">
-      <div className="registro-card">
-        <div className="registro-header">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="header-icon">
-            <path strokeNone d="M0 0h24v24H0z" fill="none"/>
-            <path d="M4 8v-2a2 2 0 0 1 2 -2h2" />
-            <path d="M4 16v2a2 2 0 0 0 2 2h2" />
-            <path d="M16 4h2a2 2 0 0 1 2 2v2" />
-            <path d="M16 20h2a2 2 0 0 0 2 -2v-2" />
-            <path d="M8 12a1 1 0 0 1 1 -1h6a1 1 0 0 1 1 1v3a1 1 0 0 1 -1 1h-6a1 1 0 0 1 -1 -1l0 -3" />
-            <path d="M10 11v-2a2 2 0 1 1 4 0v2" />
-          </svg>
-          <h1>Registro de Paciente</h1>
-        </div>
-        
-        {error && <div className="alert alert-error">{error}</div>}
-        {success && <div className="alert alert-success">{success}</div>}
+      <Card title="Crear Cuenta" className="registro-card">
+        <form onSubmit={(e) => handleSubmit(e, {
+          cedula: { required: true },
+          nombre: { required: true },
+          email: { required: true },
+          password: { required: true },
+          confirmarPassword: { required: true }
+        })}>
+          {alertMessage && (
+            <Alert 
+              type={alertType} 
+              onClose={() => setAlertMessage(null)}
+            >
+              {alertMessage}
+            </Alert>
+          )}
 
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="cedula">Cédula:</label>
-            <input
-              type="text"
-              id="cedula"
-              name="cedula"
-              value={formData.cedula}
-              onChange={handleInputChange}
-              placeholder="Ej: 1234567890"
-              disabled={loading}
-            />
-          </div>
+          <Input
+            label="Cédula"
+            name="cedula"
+            value={formData.cedula}
+            onChange={handleInputChange}
+            placeholder="12345678"
+            error={errors.cedula}
+            required
+          />
 
-          <div className="form-group">
-            <label htmlFor="nombre">Nombre Completo:</label>
-            <input
-              type="text"
-              id="nombre"
-              name="nombre"
-              value={formData.nombre}
-              onChange={handleInputChange}
-              placeholder="Ej: Juan Pérez"
-              disabled={loading}
-            />
-          </div>
+          <Input
+            label="Nombre Completo"
+            name="nombre"
+            value={formData.nombre}
+            onChange={handleInputChange}
+            placeholder="Juan Pérez"
+            error={errors.nombre}
+            required
+          />
 
-          <div className="form-group">
-            <label htmlFor="email">Email:</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              placeholder="Ej: juan@correo.com"
-              disabled={loading}
-            />
-          </div>
+          <Input
+            label="Email"
+            name="email"
+            type="email"
+            value={formData.email}
+            onChange={handleInputChange}
+            placeholder="tu@email.com"
+            error={errors.email}
+            required
+          />
 
-          <div className="form-group">
-            <label htmlFor="password">Contraseña:</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleInputChange}
-              placeholder="Contraseña segura"
-              disabled={loading}
-            />
-          </div>
+          <Input
+            label="Contraseña"
+            name="password"
+            type="password"
+            value={formData.password}
+            onChange={handleInputChange}
+            placeholder="••••••••"
+            error={errors.password}
+            required
+          />
 
-          <div className="form-group">
-            <label htmlFor="confirmarPassword">Confirmar Contraseña:</label>
-            <input
-              type="password"
-              id="confirmarPassword"
-              name="confirmarPassword"
-              value={formData.confirmarPassword}
-              onChange={handleInputChange}
-              placeholder="Repite la contraseña"
-              disabled={loading}
-            />
-          </div>
+          <Input
+            label="Confirmar Contraseña"
+            name="confirmarPassword"
+            type="password"
+            value={formData.confirmarPassword}
+            onChange={handleInputChange}
+            placeholder="••••••••"
+            error={errors.confirmarPassword}
+            required
+          />
 
-          <button 
-            type="submit" 
-            className="btn-primary"
-            disabled={loading}
+          <Button
+            type="submit"
+            variant="primary"
+            size="md"
+            loading={isSubmitting}
+            className="w-full"
           >
-            {loading ? 'Registrando...' : (
-              <>
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" className="button-icon">
-                  <path strokeNone d="M0 0h24v24H0z" fill="none"/>
-                  <path d="M17 3.34a10 10 0 1 1 -14.995 8.984l-.005 -.324l.005 -.324a10 10 0 0 1 14.995 -8.336zm-1.293 5.953a1 1 0 0 0 -1.32 -.083l-.094 .083l-3.293 3.292l-1.293 -1.292l-.094 -.083a1 1 0 0 0 -1.403 1.403l.083 .094l2 2l.094 .083a1 1 0 0 0 1.226 0l.094 -.083l4 -4l.083 -.094a1 1 0 0 0 -.083 -1.32z" />
-                </svg>
-                Registrarse
-              </>
-            )}
-          </button>
-        </form>
+            Registrarse
+          </Button>
 
-        <p className="link-text">
-          ¿Ya tienes cuenta? <Link to="/login">Inicia sesión aquí</Link>
-        </p>
-      </div>
+          <p className="login-link">
+            ¿Ya tienes cuenta? <a href={ROUTES.LOGIN}>Inicia sesión</a>
+          </p>
+        </form>
+      </Card>
     </div>
   )
 }
+
