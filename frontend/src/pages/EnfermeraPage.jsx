@@ -125,7 +125,6 @@ export function EnfermeraPage() {
             <path d="M12 10v4" />
           </svg>
           <h1>Panel de Enfermería</h1>
-          <p>Registra nuevos pacientes con sus signos vitales</p>
         </div>
         <button 
           onClick={() => navigate(ROUTES.DASHBOARD)}

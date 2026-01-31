@@ -161,7 +161,6 @@ export function MedicaPage() {
       <div className="medica-header">
         <div className="header-content">
           <h1>👩‍⚕️ Panel de Médica</h1>
-          <p>Revisa expedientes y registra diagnósticos</p>
         </div>
         <button 
           onClick={handleVolverHeader}
@@ -196,11 +195,18 @@ export function MedicaPage() {
             <h2>Registrar Diagnóstico</h2>
             {expedienteSeleccionado && (
               <Card className="expediente-info-card">
-                <h3>👤 {expedienteSeleccionado.paciente.nombre}</h3>
+                <h3>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-user"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /><path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /></svg>
+                  {expedienteSeleccionado.paciente.nombre}
+                </h3>
                 <div className="info-grid">
                   <div className="info-item">
                     <span className="label">Cédula:</span>
                     <span className="value">{expedienteSeleccionado.paciente.identificacion}</span>
+                  </div>
+                  <div className="info-item">
+                    <span className="label">Fecha de Nacimiento:</span>
+                    <span className="value">{new Date(expedienteSeleccionado.paciente.fechaNacimiento).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
                   </div>
                 </div>
               </Card>
@@ -208,7 +214,10 @@ export function MedicaPage() {
 
             {registros.length > 0 && (
               <div className="registros-section">
-                <h3>📊 Información de la Consulta</h3>
+                <h3>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-chart-dots"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 3v18h18" /><path d="M7 9a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M17 7a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M12 15a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M10.16 10.62l2.34 2.88" /><path d="M15.088 13.328l2.837 -4.586" /></svg>
+                  Información de la Consulta
+                </h3>
                 <div className="registros-grid">
                   {registros.map(registro => (
                     <SignosVitalesCard key={registro.id} registro={registro} />

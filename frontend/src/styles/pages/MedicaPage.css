@@ -90,7 +90,7 @@
 }
 
 .medica-card {
-  max-width: 1000px;
+  max-width: 900px;
   margin: 0 auto;
   background: white;
   border-radius: 12px;
@@ -260,10 +260,11 @@
   border: 2px solid #0052a3;
   border-radius: 8px;
   padding: 20px;
-  margin: 20px 0;
+  margin: 20px auto;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+  max-width: 600px;
 }
 
 .info-item {
@@ -331,7 +332,10 @@
 }
 
 .registros-section {
-  margin-bottom: 30px;
+  margin: 30px auto;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
 }
 
 .registros-section h3 {
@@ -341,6 +345,12 @@
   font-size: 16px;
   font-weight: 700;
   margin: 0 0 20px 0;
+}
+
+.registros-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
 .registro-historial {
